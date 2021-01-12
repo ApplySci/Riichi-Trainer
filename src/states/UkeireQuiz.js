@@ -123,8 +123,8 @@ class UkeireQuiz extends React.Component {
         });
     }
 
-    /** 
-     * Randomly chooses between East and South round. 
+    /**
+     * Randomly chooses between East and South round.
      * @returns {number} 31 for East, 32 for South
      */
     pickRoundWind() {
@@ -337,6 +337,13 @@ class UkeireQuiz extends React.Component {
         return availableTiles;
     }
 
+    padHand(hand) {
+        let paddedHand = hand.slice();
+        let nTiles = paddedHand.reduce((a, b) => a + b, 0);
+        paddedHand[31] += 14 - nTiles;
+        return paddedHand;
+    }
+
     /** Discards the clicked tile, adds a message comparing its efficiency with the best tile, and draws a new tile */
     onTileClicked(event) {
         if (this.timer != null) {
@@ -349,17 +356,18 @@ class UkeireQuiz extends React.Component {
 
         let chosenTile = parseInt(event.target.name);
         let hand = this.state.hand.slice();
+        let paddedHand = this.padHand(hand);
         let remainingTiles = this.state.remainingTiles.slice();
 
         let shantenFunction = this.state.settings.exceptions ? calculateMinimumShanten : calculateStandardShanten;
-        let ukeire = calculateDiscardUkeire(hand, remainingTiles, shantenFunction);
+        let ukeire = calculateDiscardUkeire(paddedHand, remainingTiles, shantenFunction);
         let chosenUkeire = ukeire[convertRedFives(chosenTile)];
 
         let handString = convertHandToTenhouString(hand);
         hand[chosenTile]--;
 
-        let shanten = shantenFunction(hand);
-        let handUkeire = calculateUkeireFromOnlyHand(hand, this.getStartingTiles(), shantenFunction);
+        let shanten = shantenFunction(paddedHand);
+        let handUkeire = calculateUkeireFromOnlyHand(paddedHand, this.getStartingTiles(), shantenFunction);
         let bestTile = evaluateBestDiscard(ukeire, this.state.dora + 1);
 
         let players = this.state.players.slice();
