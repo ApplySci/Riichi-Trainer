@@ -240,7 +240,7 @@ class UkeireQuiz extends React.Component {
             }
 
             do {
-                let generationResult = generateHand(remainingTiles);
+                let generationResult = generateHand(remainingTiles, this.state.settings.handSize);
                 hand = generationResult.hand;
                 availableTiles = generationResult.availableTiles;
                 tilePool = generationResult.tilePool;
@@ -260,7 +260,7 @@ class UkeireQuiz extends React.Component {
 
         let remainingTiles = this.getStartingTiles();
         do {
-            let generationResult = generateHand(remainingTiles);
+            let generationResult = generateHand(remainingTiles, this.state.settings.handSize);
             hand = generationResult.hand;
             availableTiles = generationResult.availableTiles;
             tilePool = generationResult.tilePool;

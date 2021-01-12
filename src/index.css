@@ -23,12 +23,22 @@
 
 .index {
     position: absolute;
-    top: -3px;
-    right: 6px;
+    top: 2px;
+    right: 3px;
     font-size: 1em;
-    color: red;
+    color: #004;
     font-weight: bold;
-    text-shadow: -1px -1px 0 #f5f0eb, 1px -1px 0 #f5f0eb, -1px 1px 0 #f5f0eb, 1px 1px 0 #f5f0eb;
+    width: 1.1em;
+    text-align: center;
+    line-height: 0.9;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+    background-color: yellow;
+    border: 1px blue solid;
+    border-top: none;
+    padding-bottom: 2px;
 }
 
 .tenhouLink {

@@ -10,6 +10,7 @@ class Settings extends React.Component {
         this.state = {
             collapsed: true,
             settings: {
+                handSize: 14,
                 characters: true,
                 bamboo: true,
                 circles: true,
@@ -53,6 +54,7 @@ class Settings extends React.Component {
                     threePlayer: savedSettings.threePlayer,
                     redFives: savedSettings.redFives || 3,
                     verbose: savedSettings.verbose,
+                    handSize: savedSettings.handSize || 14,
                     showIndexes: savedSettings.showIndexes,
                     extraConcise: savedSettings.extraConcise,
                     spoilers: savedSettings.spoilers,
@@ -84,11 +86,11 @@ class Settings extends React.Component {
         if (!event) return;
 
         let settings = this.state.settings;
-
         if (typeof event === "number") {
             settings[numberInput.id] = event;
-        }
-        else {
+        } else if (event.target.type === 'radio') {
+            settings[event.target.name] = parseInt(event.target.value) || event.target.value;
+        } else {
             settings[event.target.id] = !settings[event.target.id];
         }
 
@@ -134,6 +136,36 @@ class Settings extends React.Component {
                                     checked={this.state.settings.honors} onChange={this.onSettingChanged} />
                                 <Label className="form-check-label" for="honors">{t("settings.honors")}</Label>
                             </Col>
+                        </Row>
+                        <Row>
+                            <Col className="form-check form-check-inline">
+                                <Label className="form-check-label" for="handSize">{t("settings.handSize")}</Label>
+                            </Col>
+                            <Col className="form-check form-check-inline radio">
+                                <Label>
+                                <Input className="form-check-input" type="radio" name="handSize" value="14"
+                                    checked={this.state.settings.handSize===14} onChange={this.onSettingChanged} />
+                                14</Label>
+                            </Col>
+                            <Col className="form-check form-check-inline">
+                                <Label>
+                                <Input className="form-check-input" type="radio" name="handSize" value="11"
+                                    checked={this.state.settings.handSize===11} onChange={this.onSettingChanged} />
+                                11</Label>
+                            </Col>
+                            <Col className="form-check form-check-inline">
+                                <Label>
+                                <Input className="form-check-input" type="radio" name="handSize" value="8"
+                                    checked={this.state.settings.handSize===8} onChange={this.onSettingChanged} />
+                                8</Label>
+                            </Col>
+                            <Col className="form-check form-check-inline">
+                                <Label>
+                                <Input className="form-check-input" type="radio" name="handSize" value="5"
+                                    checked={this.state.settings.handSize===5} onChange={this.onSettingChanged} />
+                                5</Label>
+                            </Col>
+
                         </Row>
                         <Row>
                             <Col className="form-check form-check-inline">

@@ -103,6 +103,7 @@ export const en = {
             circles: "Circles",
             bamboo: "Bamboo",
             honors: "Honors",
+            handSize: "Number of tiles in a winning hand",
             sanma: "Three player rules",
             redFives: "Number of Red Fives:",
             verbose: "Verbose tile names (\"one of bamboo\" vs \"1s\")",
