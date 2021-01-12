@@ -7,9 +7,8 @@ class Settings extends React.Component {
     constructor(props) {
         super(props);
         this.toggle = this.toggle.bind(this);
-        this.state = {
-            collapsed: true,
-            settings: {
+
+        let defaultSettings = {
                 handSize: 14,
                 characters: true,
                 bamboo: true,
@@ -30,10 +29,35 @@ class Settings extends React.Component {
                 useTimer: false,
                 time: 5,
                 extraTime: 10,
-            }
+        };
+
+        this.state = {
+            collapsed: true,
+            settings: this.overrideSettings(defaultSettings)
         };
 
         this.onSettingChanged = this.onSettingChanged.bind(this);
+    }
+
+    overrideSettings(settingsIn) {
+        let settingsOut = {};
+        Object.assign(settingsOut, settingsIn);
+        let query =  new URLSearchParams(window.location.search);
+        for (let key of query.keys()) {
+            if (key in settingsOut) {
+                switch (typeof settingsOut[key]) {
+                    case "boolean":
+                        settingsOut[key] = query.get(key) === '1' || query.get(key) === 'true';
+                        break;
+                    case "number":
+                        settingsOut[key] = parseInt(query.get(key));
+                        break;
+                    default:
+                        console.log(typeof settingsOut[key]);
+                }
+            }
+        }
+        return settingsOut;
     }
 
     toggle() {
@@ -68,6 +92,8 @@ class Settings extends React.Component {
                     time: savedSettings.time || 5,
                     extraTime: savedSettings.extraTime === undefined ? 10 : savedSettings.extraTime
                 }
+
+                settings = this.overrideSettings(settings);
 
                 this.setState({
                     settings: settings
