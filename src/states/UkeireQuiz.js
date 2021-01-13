@@ -210,6 +210,10 @@ class UkeireQuiz extends React.Component {
         }
     }
 
+    doingDora() {
+        return this.state.settings.handSize === 14;
+    }
+
     /** Generates a new hand and fresh game state. */
     onNewHand() {
         if (this.timer != null) {
@@ -218,7 +222,7 @@ class UkeireQuiz extends React.Component {
         }
 
         let history = [];
-        let dora = 1;
+        let dora = false;
         let hand, availableTiles, tilePool;
 
         let minShanten = this.state.settings.minShanten;
@@ -236,7 +240,7 @@ class UkeireQuiz extends React.Component {
             this.discardHand();
             let remainingTiles = this.state.remainingTiles.slice();
 
-            if (this.state.tilePool.length > 0) {
+            if (this.state.tilePool.length > 0 && this.doingDora()) {
                 dora = removeRandomItem(this.state.tilePool);
                 remainingTiles[dora]--;
             }
@@ -277,7 +281,7 @@ class UkeireQuiz extends React.Component {
             }
         } while (calculateMinimumShanten(hand) < minShanten)
 
-        if (tilePool.length > 0) {
+        if (tilePool.length > 0 &&  this.doingDora()) {
             dora = removeRandomItem(tilePool);
             availableTiles[dora]--;
         }
@@ -373,7 +377,7 @@ class UkeireQuiz extends React.Component {
         paddedHand[chosenTile]--;
 
         let shanten = shantenFunction(paddedHand);
-        let handUkeire = calculateUkeireFromOnlyHand(paddedHand, this.getStartingTiles(), shantenFunction);        
+        let handUkeire = calculateUkeireFromOnlyHand(paddedHand, this.getStartingTiles(), shantenFunction);
         let bestTile = evaluateBestDiscard(ukeire, this.state.dora + 1);
 
         let players = this.state.players.slice();
@@ -539,7 +543,7 @@ class UkeireQuiz extends React.Component {
         }
 
         let dora = loadData.dora;
-        if (dora !== false) {
+        if (dora !== false && this.doingDora()) {
             dora = Math.min(Math.max(0, dora), 37);
             remainingTiles[dora]--;
         }
@@ -551,7 +555,7 @@ class UkeireQuiz extends React.Component {
             return;
         }
 
-        if (dora === false) {
+        if (dora === false && this.doingDora()) {
             if (tilePool.length > 0) {
                 dora = removeRandomItem(tilePool);
                 availableTiles[dora]--;

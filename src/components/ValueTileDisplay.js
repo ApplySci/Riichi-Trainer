@@ -3,6 +3,27 @@ import { Row, Col } from 'reactstrap';
 import Tile from './Tile';
 import { useTranslation } from 'react-i18next';
 
+function DoraLabel(props) {
+    let { t } = useTranslation();
+    if (props.dora === false) {
+        return null;
+    } else {
+        return (
+            <Col style={{ textAlign: "right" }} xs="2" sm="3" md="3" lg="2"><span>{t("trainer.doraIndicator")}</span></Col>
+        );
+    }
+}
+
+function DoraDisplay(props) {
+    if (props.dora === false) {
+        return null;
+    } else {
+        return (
+            <Col xs="2" sm="1"><Tile className="discardTile" tile={props.dora} showIndexes={props.showIndexes} /></Col>
+        );
+    }
+}
+
 function ValueTileDisplay(props) {
     let { t } = useTranslation();
     return (
@@ -11,10 +32,11 @@ function ValueTileDisplay(props) {
             <Col xs="2" sm="1"><Tile className="discardTile" tile={props.roundWind} showIndexes={props.showIndexes} /></Col>
             <Col style={{ textAlign: "right" }} xs="2" sm="3" md="2"><span>{t("trainer.seatWind")}</span></Col>
             <Col xs="2" sm="1"><Tile className="discardTile" tile={props.seatWind} showIndexes={props.showIndexes} /></Col>
-            <Col style={{ textAlign: "right" }} xs="2" sm="3" md="3" lg="2"><span>{t("trainer.doraIndicator")}</span></Col>
-            <Col xs="2" sm="1"><Tile className="discardTile" tile={props.dora} showIndexes={props.showIndexes} /></Col>
+            <DoraLabel dora={props.dora} />
+            <DoraDisplay dora={props.dora} showIndexes={props.showIndexes} />
         </Row>
     );
 }
+//            
 
 export default ValueTileDisplay;
