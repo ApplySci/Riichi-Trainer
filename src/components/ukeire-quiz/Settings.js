@@ -107,6 +107,7 @@ class Settings extends React.Component {
                     circles: savedSettings.circles,
                     honors: savedSettings.honors,
                     threePlayer: savedSettings.threePlayer,
+                    dora: savedSettings.dora,
                     redFives: savedSettings.redFives || 3,
                     verbose: savedSettings.verbose,
                     handSize: savedSettings.handSize || 14,
