@@ -19,6 +19,7 @@ class Settings extends React.Component {
                 verbose: true,
                 showIndexes: false,
                 extraConcise: false,
+                dora: true,
                 spoilers: true,
                 reshuffle: true,
                 simulate: false,
@@ -42,26 +43,27 @@ class Settings extends React.Component {
     overrideSettings(settingsIn) {
 
         const shortSettings = {
-            hs: 'handSize',
-            m:  'characters',
-            s:  'bamboo',
-            p:  'circles',
+            b:  'blind',
+            d:  'dora',
+            e:  'exceptions',
+            ec: 'extraConcise',
+            et: 'extraTime',
             h:  'honors',
+            hs: 'handSize',
+            i:  'showIndexes',
+            m:  'characters',
+            ms: 'minShanten',
+            p:  'circles',
             p3: 'threePlayer',
             r5: 'redFives',
-            v:  'verbose',
-            i:  'showIndexes',
-            ec: 'extraConcise',
-            sp: 'spoilers',
             rs: 'reshuffle',
+            s:  'bamboo',
             si: 'simulate',
-            e:  'exceptions',
-            ms: 'minShanten',
             so: 'sort',
-            b:  'blind',
-            ut: 'useTimer',
+            sp: 'spoilers',
             t:  'time',
-            et: 'extraTime',
+            ut: 'useTimer',
+            v:  'verbose',
         };
 
         let settingsOut = {};
@@ -227,6 +229,13 @@ class Settings extends React.Component {
                                 <Input className="form-check-input" type="checkbox" id="threePlayer"
                                     checked={this.state.settings.threePlayer} onChange={this.onSettingChanged} />
                                 <Label className="form-check-label" for="threePlayer">{t("settings.sanma")}</Label>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col className="form-check form-check-inline">
+                                <input className="form-check-input" type="checkbox" id="dora"
+                                    checked={this.state.settings.dora} onChange={this.onSettingChanged} />
+                                <Label className="form-check-label" for="dora">{t("settings.dora")}&nbsp;</Label>
                             </Col>
                         </Row>
                         <Row>

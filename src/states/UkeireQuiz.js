@@ -211,7 +211,7 @@ class UkeireQuiz extends React.Component {
     }
 
     doingDora() {
-        return this.state.settings.handSize === 14;
+        return this.state.settings.dora;
     }
 
     /** Generates a new hand and fresh game state. */

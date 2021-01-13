@@ -105,6 +105,7 @@ export const en = {
             honors: "Honors",
             handSize: "Number of tiles in a winning hand",
             sanma: "Three player rules",
+            dora: "Dora",
             redFives: "Number of Red Fives:",
             verbose: "Verbose tile names (\"one of bamboo\" vs \"1s\")",
             showIndexes: "Show Tile Indexes",
