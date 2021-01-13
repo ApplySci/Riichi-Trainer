@@ -52,7 +52,7 @@ class Settings extends React.Component {
             v:  'verbose',
             i:  'showIndexes',
             ec: 'extraConcise',
-            ss: 'spoilers',
+            sp: 'spoilers',
             rs: 'reshuffle',
             si: 'simulate',
             e:  'exceptions',
