@@ -23,6 +23,8 @@ import LocalizedMessage from '../models/LocalizedMessage';
 import UkeireHistoryData from '../components/ukeire-quiz/UkeireHistoryData';
 import HistoryData from '../models/HistoryData';
 
+const padTile = 31;
+
 class UkeireQuiz extends React.Component {
     constructor(props) {
         super(props);
@@ -340,7 +342,7 @@ class UkeireQuiz extends React.Component {
     padHand(hand) {
         let paddedHand = hand.slice();
         let nTiles = paddedHand.reduce((a, b) => a + b, 0);
-        paddedHand[31] += 14 - nTiles;
+        paddedHand[padTile] += 14 - nTiles;
         return paddedHand;
     }
 
@@ -361,13 +363,17 @@ class UkeireQuiz extends React.Component {
 
         let shantenFunction = this.state.settings.exceptions ? calculateMinimumShanten : calculateStandardShanten;
         let ukeire = calculateDiscardUkeire(paddedHand, remainingTiles, shantenFunction);
+        if (this.state.settings.handSize < 14) {
+            ukeire[padTile] = {value: 0, tiles: []};
+        }
         let chosenUkeire = ukeire[convertRedFives(chosenTile)];
 
         let handString = convertHandToTenhouString(hand);
         hand[chosenTile]--;
+        paddedHand[chosenTile]--;
 
         let shanten = shantenFunction(paddedHand);
-        let handUkeire = calculateUkeireFromOnlyHand(paddedHand, this.getStartingTiles(), shantenFunction);
+        let handUkeire = calculateUkeireFromOnlyHand(paddedHand, this.getStartingTiles(), shantenFunction);        
         let bestTile = evaluateBestDiscard(ukeire, this.state.dora + 1);
 
         let players = this.state.players.slice();
