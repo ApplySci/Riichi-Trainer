@@ -40,21 +40,50 @@ class Settings extends React.Component {
     }
 
     overrideSettings(settingsIn) {
+
+        const shortSettings = {
+            hs: 'handSize',
+            m:  'characters',
+            s:  'bamboo',
+            p:  'circles',
+            h:  'honors',
+            p3: 'threePlayer',
+            r5: 'redFives',
+            v:  'verbose',
+            i:  'showIndexes',
+            ec: 'extraConcise',
+            ss: 'spoilers',
+            rs: 'reshuffle',
+            si: 'simulate',
+            e:  'exceptions',
+            ms: 'minShanten',
+            so: 'sort',
+            b:  'blind',
+            ut: 'useTimer',
+            t:  'time',
+            et: 'extraTime',
+        };
+
         let settingsOut = {};
         Object.assign(settingsOut, settingsIn);
         let query =  new URLSearchParams(window.location.search);
         for (let key of query.keys()) {
-            if (key in settingsOut) {
-                switch (typeof settingsOut[key]) {
-                    case "boolean":
-                        settingsOut[key] = query.get(key) === '1' || query.get(key) === 'true';
-                        break;
-                    case "number":
-                        settingsOut[key] = parseInt(query.get(key));
-                        break;
-                    default:
-                        console.log(typeof settingsOut[key]);
-                }
+            let val;
+            let isShort = key in shortSettings;
+            let realKey = isShort ? shortSettings[key] : key;
+            if (isShort || key in settingsOut) {
+                val = query.get(key);
+            } else continue;
+
+            switch (typeof settingsOut[realKey]) {
+                case "boolean":
+                    settingsOut[realKey] = val === '1' || val === 'true';
+                    break;
+                case "number":
+                    settingsOut[realKey] = parseInt(val);
+                    break;
+                default:
+                    console.log('unknown setting type in Settings.js: ' + typeof settingsOut[key]);
             }
         }
         return settingsOut;
@@ -91,7 +120,7 @@ class Settings extends React.Component {
                     useTimer: savedSettings.useTimer,
                     time: savedSettings.time || 5,
                     extraTime: savedSettings.extraTime === undefined ? 10 : savedSettings.extraTime
-                }
+                };
 
                 settings = this.overrideSettings(settings);
 
