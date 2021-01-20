@@ -404,12 +404,13 @@ class Tibet extends React.Component {
 
     render() {
         let { t } = this.props;
+        let prms = this.props.match.params;
         let newSettings = {...this.state.settings};
-        newSettings.characters = this.props.match.params.m === "1";
-        newSettings.bamboo  = this.props.match.params.s === "1";
-        newSettings.circles = this.props.match.params.p === "1";
-        newSettings.honors = this.props.match.params.h === "1";
-        newSettings.handSize = parseInt(this.props.match.params.hs);
+        newSettings.characters = prms.m === "1";
+        newSettings.bamboo  = prms.s === "1";
+        newSettings.circles = prms.p === "1";
+        newSettings.honors = prms.h === "1";
+        newSettings.handSize = parseInt(prms.hs);
 
         if (this.state.settings.characters !== newSettings.characters ||
             this.state.settings.bamboo     !== newSettings.bamboo     ||
@@ -417,8 +418,7 @@ class Tibet extends React.Component {
             this.state.settings.honors     !== newSettings.honors     ||
             this.state.settings.handSize   !== newSettings.handSize ) {
 
-            console.log(newSettings);
-            this.setState({settings: newSettings});
+            this.setState({settings: newSettings}, this.onNewHand);
         }
 
         let blind = false;
