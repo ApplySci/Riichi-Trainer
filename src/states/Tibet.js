@@ -28,12 +28,12 @@ class Tibet extends React.Component {
             lastDraw: -1,
             remainingTiles: null,
             tilePool: null,
-            players: [],
+            players: [{discards: []}],
             discardCount: 0,
             optimalCount: 0,
             achievedTotal: 0,
             possibleTotal: 0,
-            settings: { /* See ../components/ukeire-quiz/Settings.js */ },
+            settings: { spoilers: true, verbose: true },
             stats: {
                 totalDiscards: 0,
                 totalTenpai: 0,
@@ -47,6 +47,8 @@ class Tibet extends React.Component {
             disclaimerSeen: false,
             currentTime: 0,
             currentBonus: 0,
+            verbose: true,
+            spoilers: true
         }
     }
 
@@ -103,7 +105,7 @@ class Tibet extends React.Component {
     setNewHandState(hand, availableTiles, tilePool, history, lastDraw = false) {
         history.unshift(new HistoryData(new LocalizedMessage("trainer.start", { hand: convertHandToTenhouString(hand) })));
 
-        let players = [];
+        let players = [{discards: []}];
 
         if (lastDraw !== false) hand[lastDraw]--;
         let shuffle = convertHandToTileIndexArray(hand);
@@ -338,7 +340,7 @@ class Tibet extends React.Component {
             shuffle: shuffle,
             disclaimerSeen: true,
             currentTime: this.state.settings.time,
-        }, isComplete ? () => this.saveStats() : undefined);
+        });
     }
 
     onUpdateTime() {

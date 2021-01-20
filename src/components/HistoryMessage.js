@@ -31,9 +31,6 @@ class HistoryMessage extends React.Component {
             <Collapse isOpen={!this.state.collapsed}>
                 <ListGroupItem className={this.props.data.getClassName()}>
                     {messageRows}
-                    {this.props.data.hand ? <a className="tenhouLink" href={"http://tenhou.net/2/?q=" + this.props.data.hand} target="_blank" rel="noopener noreferrer">
-                        {t("history.tenhouLinkText")}
-                    </a> : ""}
                 </ListGroupItem>
             </Collapse>
         );
