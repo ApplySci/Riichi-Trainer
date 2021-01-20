@@ -57,7 +57,7 @@ export function calculateKnittedShanten(handToCheck) {
         hand[bestKnittedStraight[i]]--;
     }
 
-    let knittedStraightShanten = 9 - bestKnittedStraight.length;
+    //let knittedStraightShanten = 9 - bestKnittedStraight.length;
     let standardShanten = calculateStandardShanten(hand);
     let combinedShanten = standardShanten - Math.floor(bestKnittedStraight / 3) * 2;
 
@@ -165,7 +165,7 @@ export function calculateStandardShanten(handToCheck, minimumShanten_ = -2) {
     partialSets = 0;
     bestShanten = 8;
 
-    if (minimumShanten_ == -2) {
+    if (minimumShanten_ === -2) {
         hasGivenMinimum = false;
         minimumShanten = -1;
     }

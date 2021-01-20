@@ -1,6 +1,6 @@
 {
   "name": "riichi-trainer",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "private": true,
   "homepage": "./",
   "dependencies": {
@@ -11,12 +11,13 @@
     "jquery": "^3.5.1",
     "jszip": "^3.5.0",
     "popper.js": "^1.16.1",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "react-i18next": "^10.13.2",
-    "react-numeric-input": "^2.2.3",
-    "react-scripts": "^3.4.4",
-    "reactstrap": "^7.1.0",
+    "react": "",
+    "react-dom": "",
+    "react-i18next": "",
+    "react-numeric-input": "",
+    "react-router-dom": "",
+    "react-scripts": "",
+    "reactstrap": "",
     "typescript": "^3.9.7"
   },
   "scripts": {
@@ -33,5 +34,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "eslint-plugin-react-hooks": "^4.2.0"
+  }
 }

@@ -1,4 +1,4 @@
-import LocalizedMessage from "./LocalizedMessage";
+//import LocalizedMessage from "./LocalizedMessage";
 
 export default class HistoryData {
     /**

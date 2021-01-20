@@ -24,7 +24,7 @@ class Settings extends React.Component {
                 reshuffle: true,
                 simulate: false,
                 exceptions: true,
-                minShanten: 0,
+                minShanten: 1,
                 sort: true,
                 blind: false,
                 useTimer: false,

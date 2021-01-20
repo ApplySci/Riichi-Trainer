@@ -1,0 +1,284 @@
+nav li {
+    list-style-type: none;    
+    padding-top: 1em;
+}
+
+.handTile {
+    position: relative;
+    width: 7%;
+    height:7%;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.discardTile {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.tile {
+    width: 100%;
+    height: 100%;
+}
+
+.index {
+    position: absolute;
+    top: 2px;
+    right: 3px;
+    font-size: 1em;
+    color: #004;
+    font-weight: bold;
+    text-align: center;
+    line-height: 0.9;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+    background-color: yellow;
+    border: 1px blue solid;
+    border-top: none;
+    padding-bottom: 2px;
+}
+
+.tenhouLink {
+    color: #0000EE;
+}
+
+.tenhouLink:hover {
+    color: #0B0080;
+}
+
+body {
+    background: #6C979B;
+    overflow-y: scroll;
+}
+
+span {
+    color: #FFFFFF;
+}
+
+.blackText {
+    color: #000000;
+}
+
+a {
+    color: yellow
+}
+
+a:hover {
+    color: orange
+}
+
+.collapse.width {
+    height: auto;
+    transition: width 0.35s ease;
+    -moz-transition: width 0.35s ease;
+    -o-transition: width 0.35s ease;
+    transition: width 0.35s ease;
+}
+
+
+/* AZPS content ============================================
+
+It is year of the Ox 牛
+and the year's element is Metal 金
+
+*/
+nav {
+    position: fixed;
+    width: 20vw;
+    background-color: #800;
+    color: white;
+    height: 100%;
+}
+
+.azps-modal {
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color:rgba(30, 0, 0, .8);
+}
+
+.azps-modal-content {
+    color: black;
+    border-radius: 2em;
+    position: fixed;
+    left: 20vw;
+    width: 60vw;
+    z-index: 2;
+    top: 10vh;
+    text-align: center;
+    padding: 2em;
+    background-image: -webkit-radial-gradient(  50%   0%,  8% 50%, hsla(0,0%,100%,.5) 0%, hsla(0,0%,100%,0) 100%),
+      -webkit-radial-gradient(  50% 100%, 12% 50%, hsla(0,0%,100%,.6) 0%, hsla(0,0%,100%,0) 100%),
+      -webkit-radial-gradient(   0%  50%, 50%  7%, hsla(0,0%,100%,.5) 0%, hsla(0,0%,100%,0) 100%),
+      -webkit-radial-gradient( 100%  50%, 50%  5%, hsla(0,0%,100%,.5) 0%, hsla(0,0%,100%,0) 100%),
+      
+      -webkit-repeating-radial-gradient( 50% 50%, 100% 100%, hsla(0,0%,  0%,0) 0%, hsla(0,0%,  0%,0)   3%, hsla(0,0%,  0%,.1) 3.5%),
+      -webkit-repeating-radial-gradient( 50% 50%, 100% 100%, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0)   6%, hsla(0,0%,100%,.1) 7.5%),
+      -webkit-repeating-radial-gradient( 50% 50%, 100% 100%, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0) 1.2%, hsla(0,0%,100%,.2) 2.2%),
+      
+      -webkit-radial-gradient( 50% 50%, 200% 50%, hsla(0,0%,90%,1) 5%, hsla(0,0%,85%,1) 30%, hsla(0,0%,60%,1) 100%);
+}
+
+
+
+.azps-bigtext {
+    font-size: 2em;
+}
+
+.azps-superbigtext {
+    font-size: 4em;
+}
+
+/* end of AZPS content  ============================================ */
+
+
+/* Metal - credit to Simurai https://simurai.com/lab/2011/08/21/brushed-metal  ------------------------- 
+
+see here to convert from -webkit-radial-gradient to radial-gradient - it's not trivial
+
+https://stackoverflow.com/a/33503411
+
+
+
+.radial-grad {
+  background: -webkit-radial-gradient(50% 50%, 200% 50%, 
+   hsla(0, 0%, 90%, 1) 5%,
+   hsla(0, 0%, 85%, 1) 30%,
+   hsla(0, 0%, 60%, 1) 100%);
+}
+
+BECOMES
+
+.radial-grad-standard {
+  background: radial-gradient(ellipse 200% 50% at 50% 50%,
+   hsla(0, 0%, 90%, 1) 5%,
+   hsla(0, 0%, 85%, 1) 30%,
+   hsla(0, 0%, 60%, 1) 100%);
+}
+*/
+
+button.metal { border: none; display: block; outline: none; }
+
+.metal {
+    position: relative;
+    margin: 40px auto;
+    outline: none;
+    
+    font: bold 6em/2em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+    text-align: center;
+    color: hsla(0,0%,20%,1);
+    text-shadow: hsla(0,0%,40%,.5) 0 -1px 0, hsla(0,0%,100%,.6) 0 2px 1px;
+    
+    background-color: hsl(0,0%,90%);
+    box-shadow: inset hsla(0,0%,15%,  1) 0  0px 0px 4px, /* border */
+      inset hsla(0,0%,15%, .8) 0 -1px 5px 4px, /* soft SD */
+      inset hsla(0,0%,0%, .25) 0 -1px 0px 7px, /* bottom SD */
+      inset hsla(0,0%,100%,.7) 0  2px 1px 7px, /* top HL */
+      
+      hsla(0,0%, 0%,.15) 0 -5px 6px 4px, /* outer SD */
+      hsla(0,0%,100%,.5) 0  5px 6px 4px; /* outer HL */ 
+    
+    transition: color .2s;
+  }
+  
+  
+  
+  /* Radial ------------------------- */
+  
+  .radial.metal {
+    width: 160px;
+    height: 160px;
+    line-height: 160px;
+    border-radius: 80px;
+    background-image: -webkit-radial-gradient(  50%   0%,  8% 50%, hsla(0,0%,100%,.5) 0%, hsla(0,0%,100%,0) 100%),
+      -webkit-radial-gradient(  50% 100%, 12% 50%, hsla(0,0%,100%,.6) 0%, hsla(0,0%,100%,0) 100%),
+      -webkit-radial-gradient(   0%  50%, 50%  7%, hsla(0,0%,100%,.5) 0%, hsla(0,0%,100%,0) 100%),
+      -webkit-radial-gradient( 100%  50%, 50%  5%, hsla(0,0%,100%,.5) 0%, hsla(0,0%,100%,0) 100%),
+      
+      -webkit-repeating-radial-gradient( 50% 50%, 100% 100%, hsla(0,0%,  0%,0) 0%, hsla(0,0%,  0%,0)   3%, hsla(0,0%,  0%,.1) 3.5%),
+      -webkit-repeating-radial-gradient( 50% 50%, 100% 100%, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0)   6%, hsla(0,0%,100%,.1) 7.5%),
+      -webkit-repeating-radial-gradient( 50% 50%, 100% 100%, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0) 1.2%, hsla(0,0%,100%,.2) 2.2%),
+      
+      -webkit-radial-gradient( 50% 50%, 200% 50%, hsla(0,0%,90%,1) 5%, hsla(0,0%,85%,1) 30%, hsla(0,0%,60%,1) 100%);
+  }
+  
+  
+  .metal.radial:before, .metal.radial:after {
+    content: "";
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: inherit;
+    height: inherit;
+    border-radius: inherit;
+    
+    /* fake conical gradients */
+    background-image: -webkit-radial-gradient(  50%   0%, 10% 50%, hsla(0,0%,0%,.1) 0%, hsla(0,0%,0%,0) 100%),
+      -webkit-radial-gradient(  50% 100%, 10% 50%, hsla(0,0%,0%,.1) 0%, hsla(0,0%,0%,0) 100%),
+      -webkit-radial-gradient(   0%  50%, 50% 10%, hsla(0,0%,0%,.1) 0%, hsla(0,0%,0%,0) 100%),
+      -webkit-radial-gradient( 100%  50%, 50% 06%, hsla(0,0%,0%,.1) 0%, hsla(0,0%,0%,0) 100%);
+  }
+  .metal.radial:before { transform: rotate( 65deg); }
+  .metal.radial:after { transform: rotate(-65deg); }
+  
+  
+  /* Linear ------------------------- */
+  
+  .metal.linear {
+    width: 100px;
+    font-size: 4em;
+    height: 80px;
+    border-radius: .5em;
+    background-image: -webkit-repeating-linear-gradient(left, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0)   6%, hsla(0,0%,100%, .1) 7.5%),
+      -webkit-repeating-linear-gradient(left, hsla(0,0%,  0%,0) 0%, hsla(0,0%,  0%,0)   4%, hsla(0,0%,  0%,.03) 4.5%),
+      -webkit-repeating-linear-gradient(left, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0) 1.2%, hsla(0,0%,100%,.15) 2.2%),
+      
+      linear-gradient(180deg, hsl(0,0%,78%)  0%, 
+      hsl(0,0%,90%) 47%, 
+      hsl(0,0%,78%) 53%,
+      hsl(0,0%,70%)100%);
+  }
+  
+  
+  /* Oval ------------------------- */
+  
+  .metal.linear.oval {
+    margin-top: 100px;
+    width: 70px;
+    height: 60px;
+    line-height: 60px !important;
+    border-radius: 50%;
+    font: italic bold 3em/50px Georgia, "Times New Roman", Times, serif;
+  }
+  
+  /* active ------------------------- */
+  
+  .metal:active {
+    color: hsl(210, 100%, 40%);
+    text-shadow: hsla(210,100%,20%,.3) 0 -1px 0, hsl(210,100%,85%) 0 2px 1px, hsla(200,100%,80%,1) 0 0 5px, hsla(210,100%,50%,.6) 0 0 20px;
+    box-shadow: 
+      inset hsla(210,100%,30%,  1) 0  0px 0px 4px, /* border */
+      inset hsla(210,100%,15%, .4) 0 -1px 5px 4px, /* soft SD */
+      inset hsla(210,100%,20%,.25) 0 -1px 0px 7px, /* bottom SD */
+      inset hsla(210,100%,100%,.7) 0  2px 1px 7px, /* top HL */
+      
+      hsla(210,100%,75%, .8) 0  0px 3px 2px, /* outer SD */
+      hsla(210,50%,40%, .25) 0 -5px 6px 4px, /* outer SD */
+      hsla(210,80%,95%,   1) 0  5px 6px 4px; /* outer HL */
+  }
+
+  /* End of Metal - credit to Simurai https://simurai.com/lab/2011/08/21/brushed-metal  ------------------------- */
+  .metal.smallmetal {
+      font-size: 1em;
+      padding: 0;
+      line-height: inherit;
+  }
