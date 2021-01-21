@@ -171,7 +171,9 @@ class Tibet extends React.Component {
                 });
                 return;
             }
-        } while (calculateMinimumShanten(hand) < minShanten)
+            let thisShanten = calculateMinimumShanten(hand);
+            console.log('minShanten=' + minShanten + '; hand shangen=' + thisShanten);
+        } while (thisShanten < minShanten)
 
         this.setNewHandState(hand, availableTiles, tilePool, history);
     }
