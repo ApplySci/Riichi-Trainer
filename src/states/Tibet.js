@@ -5,7 +5,7 @@ import History from "../components/History";
 import DiscardPool from "../components/DiscardPool";
 import { generateHand, fillHand } from '../scripts/GenerateHand';
 import { calculateDiscardUkeire, calculateUkeireFromOnlyHand } from "../scripts/UkeireCalculator";
-import { calculateMinimumShanten, calculateStandardShanten } from "../scripts/ShantenCalculator";
+import { calculateStandardShanten } from "../scripts/ShantenCalculator";
 import { convertHandToTenhouString, convertHandToTileIndexArray } from "../scripts/HandConversions";
 import { evaluateBestDiscard } from "../scripts/Evaluations";
 import { shuffleArray, removeRandomItem } from '../scripts/Utils';
@@ -159,7 +159,7 @@ class Tibet extends React.Component {
         let remainingTiles = this.getStartingTiles();
         let thisShanten = minShanten - 1;
         do {
-            let generationResult = generateHand(remainingTiles, this.state.settings.handSize);
+            let generationResult = generateHand(remainingTiles, parseInt(this.props.match.params.hs));
             hand = generationResult.hand;
             availableTiles = generationResult.availableTiles;
             tilePool = generationResult.tilePool;
@@ -173,7 +173,6 @@ class Tibet extends React.Component {
                 return;
             }
             thisShanten = calculateStandardShanten(this.padHand(hand));
-            console.log('minShanten=' + minShanten + '; hand shanten=' + thisShanten);
         } while (thisShanten < minShanten)
 
         this.setNewHandState(hand, availableTiles, tilePool, history);
@@ -186,25 +185,25 @@ class Tibet extends React.Component {
     getStartingTiles() {
         let availableTiles = Array(38).fill(0);
 
-        if (this.state.settings.characters) {
+        if (this.props.match.params.m === "1") {
             for (let i = 1; i < 10; i++) {
                 availableTiles[i] = 4;
             }
         }
 
-        if (this.state.settings.circles) {
+        if (this.props.match.params.p === "1") {
             for (let i = 11; i < 20; i++) {
                 availableTiles[i] = 4;
             }
         }
 
-        if (this.state.settings.bamboo) {
+        if (this.props.match.params.s === "1") {
             for (let i = 21; i < 30; i++) {
                 availableTiles[i] = 4;
             }
         }
 
-        if (this.state.settings.honors) {
+        if (this.props.match.params.h === "1") {
             for (let i = 31; i < 38; i++) {
                 availableTiles[i] = 4;
             }
@@ -237,7 +236,7 @@ class Tibet extends React.Component {
 
         let shantenFunction = calculateStandardShanten;
         let ukeire = calculateDiscardUkeire(paddedHand, remainingTiles, shantenFunction);
-        if (this.state.settings.handSize < 14) {
+        if (parseInt(this.props.match.params.hs) < 14) {
             ukeire[padTile] = {value: 0, tiles: []};
         }
         let chosenUkeire = ukeire[chosenTile];
@@ -405,25 +404,14 @@ class Tibet extends React.Component {
         });
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.match.params !== prevProps.match.params) {
+          this.onNewHand();
+        }
+    }
+
     render() {
         let { t } = this.props;
-        let prms = this.props.match.params;
-        let newSettings = {...this.state.settings};
-        newSettings.characters = prms.m === "1";
-        newSettings.bamboo  = prms.s === "1";
-        newSettings.circles = prms.p === "1";
-        newSettings.honors = prms.h === "1";
-        newSettings.handSize = parseInt(prms.hs);
-
-        if (this.state.settings.characters !== newSettings.characters ||
-            this.state.settings.bamboo     !== newSettings.bamboo     ||
-            this.state.settings.circles    !== newSettings.circles    ||
-            this.state.settings.honors     !== newSettings.honors     ||
-            this.state.settings.handSize   !== newSettings.handSize ) {
-
-            this.setState({settings: newSettings}, this.onNewHand);
-        }
-
         let blind = false;
 
         return (
