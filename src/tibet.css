@@ -10,11 +10,19 @@ and the year's element is Metal 金
     height: 6%;
 }
 
-nav li {
+a:hover {
+  text-decoration: none;
+}
+
+.azpslist li {
+  font-size: 1.5em;
+  padding-top: 0.2em;
+}
+
+li {
     list-style-type: none;
     padding-top: 1em;
 }
-
 
 nav li a.active {
     background-color: #f00;
@@ -36,6 +44,9 @@ nav {
     margin: 1em 2em 1em 2em;
     right: 0;
     width: auto;
+}
+body {
+    background-color: #CDF;
 }
 
 .azps-modal {

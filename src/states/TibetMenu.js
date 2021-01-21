@@ -1,17 +1,18 @@
 import React from 'react';
 import { withTranslation } from "react-i18next";
-import { BrowserRouter, NavLink, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Link, NavLink, Route, Switch } from 'react-router-dom';
 import Tibet from "./Tibet";
 import PopUp from "../components/PopUp";
+import Intro from "../components/Intro";
 
 class TibetMenu extends React.Component {
     state = {
-        seen: false
+        showPopup: true
         };
 
     togglePop = () => {
         this.setState({
-            seen: !this.state.seen
+            showPopup: !this.state.showPopup
         });
     };
 
@@ -19,7 +20,7 @@ class TibetMenu extends React.Component {
         return (
             <BrowserRouter>
                 <nav>
-                    <button className="metal radial" onClick={this.togglePop}>牛</button>
+                    <Link to=''><button className="metal radial" onClick={this.togglePop}>牛</button></Link>
                     <ul>
                         <li><NavLink to='/tibet/5/1/0/0/0'>5 tiles, 1 suit</NavLink></li>
                         <li><NavLink to='/tibet/8/1/0/0/0'>8 tiles, 1 suit</NavLink></li>
@@ -32,8 +33,9 @@ class TibetMenu extends React.Component {
                 </nav>
                 <Switch>
                     <Route path="/tibet/:hs/:p/:s/:m/:h" component={Tibet} />
+                    <Route exact path="/" component={Intro} />
                 </Switch>
-                {this.state.seen ? <PopUp toggle={this.togglePop} /> : null}
+                {this.state.showPopup ? <PopUp toggle={this.togglePop} /> : null}
             </BrowserRouter>
         );
     }

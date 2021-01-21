@@ -425,6 +425,7 @@ class Tibet extends React.Component {
                     <Row className="mt-2" style={{justifyContent:'flex-end', marginRight:1}}><span>{this.state.currentTime.toFixed(1)} + {this.state.currentBonus.toFixed(1)}</span></Row>
                     : ""
                 }
+                <Row>{this.state.lastDraw < 0 ? "The hand is now ready to win! Click on the button below for a new hand, or select a new format from the list on the left." : "Click on a tile to discard it"}</Row>
                 <Row className="mt-2">
                     <Col xs="6" sm="3" md="3" lg="2">
                         <Button className="metal linear smallmetal" color={this.state.isComplete ? "success" : "warning"} onClick={() => this.onNewHand()}>{t("trainer.newHandButtonLabel")}</Button>
