@@ -157,6 +157,7 @@ class Tibet extends React.Component {
         minShanten = Math.max(0, minShanten);
 
         let remainingTiles = this.getStartingTiles();
+        let thisShanten = minShanten - 1;
         do {
             let generationResult = generateHand(remainingTiles, this.state.settings.handSize);
             hand = generationResult.hand;
@@ -171,7 +172,7 @@ class Tibet extends React.Component {
                 });
                 return;
             }
-            let thisShanten = calculateMinimumShanten(hand);
+            thisShanten = calculateMinimumShanten(hand);
             console.log('minShanten=' + minShanten + '; hand shangen=' + thisShanten);
         } while (thisShanten < minShanten)
 
