@@ -1,0 +1,16 @@
+#!/bin/bash
+export TMPDIR=/home/model/apps/node2/tmp
+mkdir -p /home/model/apps/node2/tmp
+PIDFILE="/home/model/apps/node2/tmp/node.pid"
+BINCMD="/usr/bin/npx serve -p 17451 -s"
+PTH="/home/model/apps/node2/Riichi-Trainer/build/"
+
+if [ -e "$PIDFILE" ] && (pgrep -u model | grep -x -f $PIDFILE &> /dev/null); then
+  echo "Node.js for node2 already running."
+  exit 99
+fi
+
+cd $PTH
+/usr/sbin/daemonize -v -c $PTH -e ~/logs/apps/node2/node_error.log -o ~/logs/apps/node2/node_output.log -p $PIDFILE $BINCMD
+
+echo "Started Node.js for node2."
