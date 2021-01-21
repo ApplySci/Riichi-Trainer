@@ -19,6 +19,7 @@ class TibetMenu extends React.Component {
     render() {
         return (
             <BrowserRouter>
+                {this.state.showPopup ? <PopUp toggle={this.togglePop} /> : null}
                 <nav>
                     <Link to=''><button className="metal radial" onClick={this.togglePop}>牛</button></Link>
                     <ul>
@@ -29,13 +30,16 @@ class TibetMenu extends React.Component {
                         <li><NavLink to='/tibet/11/1/1/1/0'>11 tiles, 3 suits</NavLink></li>
                         <li><NavLink to='/tibet/14/1/1/1/0'>14 tiles, 3 suits</NavLink></li>
                         <li><NavLink to='/tibet/14/1/1/1/1'>14 tiles, 3 suits &amp; Honours</NavLink></li>
+                        <li>Advanced:</li>
+                        <li><NavLink to='/tibet/11/1/0/0/0'>11 tiles, 1 suit</NavLink></li>
+                        <li><NavLink to='/tibet/14/1/0/0/0'>14 tiles, 1 suits</NavLink></li>
+                        <li></li>
                     </ul>
                 </nav>
                 <Switch>
                     <Route path="/tibet/:hs/:p/:s/:m/:h" component={Tibet} />
                     <Route exact path="/" component={Intro} />
                 </Switch>
-                {this.state.showPopup ? <PopUp toggle={this.togglePop} /> : null}
             </BrowserRouter>
         );
     }
