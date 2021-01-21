@@ -33,7 +33,7 @@ class Tibet extends React.Component {
             optimalCount: 0,
             achievedTotal: 0,
             possibleTotal: 0,
-            settings: { spoilers: true, verbose: true },
+            settings: { spoilers: true, verbose: true, minShanten: 1 },
             stats: {
                 totalDiscards: 0,
                 totalTenpai: 0,
