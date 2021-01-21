@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Button, Col } from 'reactstrap';
+import { Container } from 'reactstrap';
 import Hand from '../components/Hand';
 
 export default function Intro() {

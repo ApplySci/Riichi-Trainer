@@ -13,7 +13,7 @@ import { withTranslation } from 'react-i18next';
 import LocalizedMessage from '../models/LocalizedMessage';
 import UkeireHistoryData from '../components/ukeire-quiz/UkeireHistoryData';
 import HistoryData from '../models/HistoryData';
-
+import ShowWin from "./ShowWin";
 const padTile = 31;
 
 class Tibet extends React.Component {
@@ -328,6 +328,7 @@ class Tibet extends React.Component {
 
         this.setState({
             hand: hand,
+            handUkeire: handUkeire,
             tilePool: tilePool,
             remainingTiles: remainingTiles,
             players: players,
@@ -412,20 +413,28 @@ class Tibet extends React.Component {
 
     render() {
         let { t } = this.props;
-        let blind = false;
-
+        let nGroups = Math.floor(this.props.match.params.hs/3);
         return (
             <Container>
+                <Row>A winning hand has {nGroups} group{nGroups > 1 ? "s" : ""} of three tiles, and an identical pair.
+                Within any one group, all the tiles must come from the same suit. Different groups can come from different suits.</Row>
                 <Hand tiles={this.state.hand}
                     lastDraw={this.state.lastDraw}
                     onTileClick={this.onTileClicked}
-                    showIndexes={this.state.settings.showIndexes && !blind}
-                    blind={blind} />
+                    showIndexes={true}
+                    blind={false} />
                 {this.state.settings.useTimer ?
                     <Row className="mt-2" style={{justifyContent:'flex-end', marginRight:1}}><span>{this.state.currentTime.toFixed(1)} + {this.state.currentBonus.toFixed(1)}</span></Row>
                     : ""
                 }
-                <Row>{this.state.lastDraw < 0 ? "The hand is now ready to win! Click on the button below for a new hand, or select a new format from the list on the left." : "Click on a tile to discard it"}</Row>
+                {this.state.isComplete
+                    ? <Container>
+                        <Row>The hand is now ready to win!</Row>
+                        <ShowWin winningTiles={this.state.handUkeire.tiles} remainingTiles={this.state.remainingTiles}/>
+                        <Row>Click on the button below for a new hand, or select a new format from the list on the left.</Row>
+                      </Container>
+                    : <Row>Click on a tile to discard it</Row>
+                }
                 <Row className="mt-2">
                     <Col xs="6" sm="3" md="3" lg="2">
                         <Button className="metal linear smallmetal" color={this.state.isComplete ? "success" : "warning"} onClick={() => this.onNewHand()}>{t("trainer.newHandButtonLabel")}</Button>
