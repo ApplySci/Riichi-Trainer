@@ -427,7 +427,7 @@ class Tibet extends React.Component {
                 }
                 <Row className="mt-2">
                     <Col xs="6" sm="3" md="3" lg="2">
-                        <Button className="metal linear radial smallmetal" color={this.state.isComplete ? "success" : "warning"} onClick={() => this.onNewHand()}>{t("trainer.newHandButtonLabel")}</Button>
+                        <Button className="metal linear smallmetal" color={this.state.isComplete ? "success" : "warning"} onClick={() => this.onNewHand()}>{t("trainer.newHandButtonLabel")}</Button>
                     </Col>
                 </Row>
                 <Row className="mt-2 no-gutters">
