@@ -11,9 +11,6 @@ class ShowWin extends React.Component {
         this.onDone = this.onDone.bind(this);
     }
 
-    componentDidMount() {
-    }
-
     onTileClicked(evt) {
         if (this.state.done) return;
         let selectedTiles = this.state.selectedTiles.slice();
@@ -29,6 +26,10 @@ class ShowWin extends React.Component {
 
     onDone(evt) {
         this.setState({ done: true });
+    }
+
+    plurals(number, string) {
+        return "" + number + " " + string + (number === 1 ? "" : "s");
     }
 
     render() {
@@ -60,12 +61,14 @@ class ShowWin extends React.Component {
             <Row>{tiles}</Row>
             { c.state.done ? (<Row>
                 You scored {rightWrong[0] + rightWrong[3]} out of {tiles.length}.<br/>
-                You correctly found {rightWrong[0]} of the {c.props.winningTiles.length} winning tiles,
-                and correctly avoided {rightWrong[3]} tiles which you couldn't win on.<br/>
+                You correctly found
+                {rightWrong[0] === c.props.winningTiles.length ?
+                    ' the ' : (' ' + rightWrong[0] + ' of the ')} {this.plurals(c.props.winningTiles.length, "winning tile")},
+                and correctly avoided {this.plurals(rightWrong[3], "tile")} which you couldn't win on.<br/>
                 {(rightWrong[1] + rightWrong[2] === 0) ? " Congratulations!" :
                   " However, "
-                + (rightWrong[2] > 0 ? ('you missed ' + rightWrong[2] + ' winning tiles; ') : '')
-                + (rightWrong[1] > 0 ? ('you wrongly selected ' + rightWrong[1] + ' non-winning tiles.') : '')
+                + (rightWrong[2] > 0 ? ('you missed ' + this.plurals(rightWrong[2], 'winning tile') + '; ') : '')
+                + (rightWrong[1] > 0 ? ('you wrongly selected ' + this.plurals(rightWrong[1], 'non-winning tile') + '.') : '')
                 }
                 </Row>)
              : <Button onClick={c.onDone}>Done</Button> }
