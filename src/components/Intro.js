@@ -23,7 +23,7 @@ export default function Intro() {
                 <li>(Some rulesets - but not the one we're using today - also have honour tiles.)</li>
                 <li>A winning hand is made up of a number of groups of three tiles, and an identical pair.</li>
                 <li>The tiles within any single group must come from within the same suit.</li>
-                <li>They can either form a sequence of three <i>consecutive</i> tiles (e.g. 123 or 567; but not 135 or 468)</li>
+                <li>They can either form a sequence of three <i>consecutive</i> tiles (e.g. 123 or 567; but not 135 or 468 or 891)</li>
                 <li>Or a triplet of identical tiles (e.g. 777)</li>
                 <li>We will introduce these suits into the hand one at a time.</li>
             </ul>
