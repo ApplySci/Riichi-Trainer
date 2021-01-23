@@ -1,0 +1,14 @@
+{
+  "name": "Sichuan-Server",
+  "version": "0.0.1",
+  "private": true,
+  "homepage": "./",
+  "dependencies": {
+    "fraud": "latest",
+    "socket.io": "latest",
+    "nodemon": "latest"
+  },
+  "scripts": {
+    "start": "npx serve"
+  }
+}
