@@ -7,22 +7,34 @@ import { Game } from './Game';
 // const Fraud = require("fraud");  // for saving stuff to disk https://www.npmjs.com/package/fraud
 const io = require('socket.io')(); // https://socket.io/docs/v3/emit-cheatsheet/
 
+const database = new Fraud({
+    directory: "./database"
+});
+
+const admin = database.read('admin');
+
 const port = 4227
 
-let players = [];
+let players = {};
 let scores = [];
 let seat = 3; // to force a new game to be created when we add the first player
 let table = -1;
 let games = [];
-
-function reset(game) {
-  seats.splice(game, 1);
-  hands.splice(game, 1);
-  discards.splice(game*4, 4);
-  remainingTiles.splice(game, 1);
-}
+let admin = null;
 
 io.on('connection', function (socket) {
+
+    let pSeat;
+    let pTable;
+
+    function gotName(name) {
+        if (name in players.keys()) {
+
+        } else {
+            players[name] = socket;
+        }
+        games[table].assignSeat(pSeat, name));
+    }
 
     seat++;
     if (seat > 3) {
@@ -34,13 +46,15 @@ io.on('connection', function (socket) {
             bamboo: true,
             circles: true,
         }));
+        if (admin !== null) {
+            admin.join('T' + table);
+        }
     }
 
-    let pSeat = seat;
-    let pTable = table;
+    pSeat = seat;
+    pTable = table;
 
-    socket.emit('table', table);
-    socket.emit('seat', seat);
+    socket.emit('hello', { table: table, seat: seat });
 
     socket.join('T' + table);
 
@@ -48,17 +62,13 @@ io.on('connection', function (socket) {
         // TODO socketsToSeats.delete(socket);
     });
 
-    socket.on('name', (name) => games[table].assignSeat(pSeat, name));
+    socket.on('name', gotName);
 
     socket.on('winningTiles', function(tiles) {
 
     });
 
-    socket.on('claimWin', function(dummy) {
-
-    });
-
-    socket.on('discard', function() {
+    socket.on('discard', function(discard) {
         // is the game live
 
         // is it this player's turn?
@@ -66,13 +76,19 @@ io.on('connection', function (socket) {
         // update table
 
         // send discard to all players at this table
-        io.emit({table: pTable, player: , discard});
+        socket.to('T' + pTable).emit('discard', { table: pTable, seat: pSeat, discard: discard });
 
         // check victory - are any of the players at this table waiting on this discard?
 
 
-        // rotate to next player
-        io.emit('turn', {table: table, seat: pSeat, discard: });
+
+        socket.on('claimWin', function(dummy) {
+
+        });
+
+        if not
+            // rotate to next player
+        socket.to('T' + pTable).emit('turn', { table: table, turn: pSeat });
     });
 
     socket.on('', function() {

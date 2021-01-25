@@ -1,0 +1,222 @@
+import React from 'react';
+import { Container, Row, Button, Col } from 'reactstrap';
+import Hand from '../components/Hand';
+import DiscardPool from "../components/DiscardPool";
+import { generateHand, fillHand } from '../scripts/GenerateHand';
+import { calculateStandardShanten } from "../scripts/ShantenCalculator";
+import { convertHandToTileIndexArray } from "../scripts/HandConversions";
+import { shuffleArray, removeRandomItem } from '../scripts/Utils';
+import { withTranslation } from 'react-i18next';
+import LocalizedMessage from '../models/LocalizedMessage';
+import ShowWin from "./ShowWin";
+import openSocket from 'socket.io-client';
+import GameClient from './GameClient';
+
+class SichuanBloody extends React.Component {
+    constructor(props) {
+        super(props);
+        this.onTileClicked = this.onTileClicked.bind(this);
+        this.updateTime = this.onUpdateTime.bind(this);
+        this.timerUpdate = null;
+        this.timer = null;
+        this.state = {
+            currentBonus: 0,
+            currentTime: 0,
+            myTurn: false,
+            socket: openSocket('wss://ws.azps.info/'),
+        }
+
+      let self = this
+
+      this.state.socket.on('board', board => {
+          this.setState(...self.state, {board: board})
+      });
+
+    }
+
+    componentDidMount() {
+        this.setState({}, () => this.onNewHand());
+    }
+
+    componentWillUnmount() {
+        if (this.timer != null) {
+            clearTimeout(this.timer);
+            clearInterval(this.timerUpdate);
+        }
+    }
+
+    onSettingsChanged(settings) {
+        if (!settings.useTimer) {
+            if (this.timer != null) {
+                clearTimeout(this.timer);
+                clearInterval(this.timerUpdate);
+            }
+        }
+
+        this.setState({
+            settings: settings
+        });
+    }
+
+
+    /**
+     * Sets the state to a clean slate based on the given parameters.
+     * @param {TileCounts} hand The player's hand.
+     * @param {TileCounts} availableTiles The tiles remaining in the wall.
+     * @param {TileIndex[]} tilePool A list of tile indexes representing the remaining tiles.
+     * @param {UkeireHistoryData[]} history A list of history objects.
+     * @param {TileIndex} lastDraw The tile the player just drew.
+     */
+    setNewHandState(hand, availableTiles, tilePool, history, lastDraw = false) {
+        history.unshift(new HistoryData(new LocalizedMessage("trainer.start", { hand: convertHandToTenhouString(hand) })));
+
+        let players = [{discards: []}];
+
+        if (lastDraw !== false) hand[lastDraw]--;
+        let shuffle = convertHandToTileIndexArray(hand);
+        if (lastDraw !== false) hand[lastDraw]++;
+        shuffle = shuffleArray(shuffle);
+
+        this.setState({
+            hand: hand,
+            remainingTiles: availableTiles,
+            tilePool: tilePool,
+            players: players,
+            discardCount: 0,
+            optimalCount: 0,
+            achievedTotal: 0,
+            possibleTotal: 0,
+            history: history,
+            isComplete: false,
+            lastDraw: lastDraw || shuffle.pop(),
+            shuffle: shuffle,
+            currentTime: this.state.settings.time + 2,
+            currentBonus: this.state.settings.extraTime
+        });
+
+        if (this.state.disclaimerSeen && this.state.settings.useTimer) {
+            this.timer = setTimeout(
+                () => {
+                    this.onTileClicked({target:{name:this.state.lastDraw}});
+                    this.setState({
+                        currentBonus: 0
+                    });
+                },
+                (this.state.settings.time + this.state.settings.extraTime + 2) * 1000
+            );
+            this.timerUpdate = setInterval(this.updateTime, 100);
+        }
+
+    }
+
+    /** Generates a new hand and fresh game state. */
+    onNewHand() {
+        if (this.timer != null) {
+            clearTimeout(this.timer);
+            clearInterval(this.timerUpdate);
+        }
+
+        let history = [];
+        let hand, availableTiles, tilePool;
+
+        this.setNewHandState(hand, availableTiles, tilePool, history);
+    }
+
+    /** Discards the clicked tile, adds a message comparing its efficiency with the best tile, and draws a new tile */
+    onTileClicked(event) {
+        if (this.timer != null) {
+            clearTimeout(this.timer);
+            clearInterval(this.timerUpdate);
+        }
+
+        let isComplete = this.state.isComplete;
+        if (isComplete) return;
+
+        let chosenTile = parseInt(event.target.name);
+        let hand = this.state.hand.slice();
+
+        let shantenFunction = calculateStandardShanten;
+
+        hand[chosenTile]--;
+
+        this.setState({
+            hand: hand,
+            players: players,
+            hasCopied: false,
+            isComplete: isComplete,
+            lastDraw: drawnTile,
+            currentTime: this.state.settings.time,
+        });
+    }
+
+    onUpdateTime() {
+        if (this.state.currentTime > 0.1) {
+            this.setState({
+                currentTime: Math.max(this.state.currentTime - 0.1, 0)
+            });
+        } else {
+            this.setState({
+                currentBonus: Math.max(this.state.currentBonus - 0.1, 0)
+            });
+        }
+    }
+
+    /**
+     * Starts a new round with the hand the player loaded, if possible.
+     * @param {{hand:TileCounts, tiles:number, draw:TileIndex}} loadData The data from the hand parser.
+     */
+    onHandLoaded(loadData) {
+        let draw = loadData.draw;
+
+        if (draw !== false) {
+            draw = Math.min(Math.max(0, draw), 37);
+            // Ensure the drawn tile is in the hand
+            if (hand[draw] <= 0) draw = false;
+        }
+
+        this.setNewHandState(hand, availableTiles, tilePool, [], draw);
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.match.params !== prevProps.match.params) {
+          this.onNewHand();
+        }
+    }
+
+    render() {
+        let { t } = this.props;
+        let nGroups = Math.floor(this.props.match.params.hs/3);
+        return (
+            <Container>
+                <Hand tiles={this.state.hand}
+                    lastDraw={this.state.lastDraw}
+                    onTileClick={this.onTileClicked}
+                    showIndexes={true}
+                    blind={false} />
+                {this.state.settings.useTimer ?
+                    <Row className="mt-2" style={{justifyContent:'flex-end', marginRight:1}}><span>{this.state.currentTime.toFixed(1)} + {this.state.currentBonus.toFixed(1)}</span></Row>
+                    : ""
+                }
+                {this.state.isComplete
+                    ? <Container>
+                        <Row>The hand is now ready to win!</Row>
+                        <ShowWin winningTiles={this.state.handUkeire.tiles} remainingTiles={this.state.remainingTiles}/>
+                        <Row>Click on the button below for a new hand, or select a new format from the list on the left.</Row>
+                      </Container>
+                    : <Row>Click on a tile to discard it</Row>
+                }
+                <Row className="mt-2">
+                    <Col xs="6" sm="3" md="3" lg="2">
+                        <Button className="metal linear smallmetal" color={this.state.isComplete ? "success" : "warning"} onClick={() => this.onNewHand()}>{t("trainer.newHandButtonLabel")}</Button>
+                    </Col>
+                </Row>
+                <Row className="mt-2 no-gutters">
+                    <History history={this.state.history} concise={this.state.settings.extraConcise} verbose={this.state.settings.verbose} spoilers={this.state.settings.spoilers}/>
+                    <DiscardPool players={this.state.players} discardCount={this.state.discardCount} wallCount={this.state.tilePool && this.state.tilePool.length} showIndexes={this.state.settings.showIndexes} />
+                </Row>
+            </Container>
+        );
+    }
+}
+
+export default withTranslation()(SichuanBloody);
