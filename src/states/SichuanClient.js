@@ -42,7 +42,8 @@ class SichuanClient extends React.Component {
             currentBonus: 0,
             currentTime: 0,
             myTurn: false,
-            socket: openSocket('wss://ws.azps.info/')
+            settings: { useTimer: true },
+            socket: openSocket('wss://mahjong.azps.info/')
         }
 
       let self = this
