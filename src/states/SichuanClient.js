@@ -1,3 +1,20 @@
+/*
+
+src/states/BaseGame.js
+  Line 5:15:  'padTile' is assigned a value but never used  no-unused-vars
+
+src/states/SichuanClient.js
+  Line 5:10:    'generateHand' is defined but never used                 no-unused-vars
+  Line 5:24:    'fillHand' is defined but never used                     no-unused-vars
+  Line 6:10:    'calculateStandardShanten' is defined but never used     no-unused-vars
+  Line 7:10:    'convertHandToTileIndexArray' is defined but never used  no-unused-vars
+  Line 8:10:    'shuffleArray' is defined but never used                 no-unused-vars
+  Line 8:24:    'removeRandomItem' is defined but never used             no-unused-vars
+  Line 10:8:    'LocalizedMessage' is defined but never used             no-unused-vars
+  Line 14:8:    'Player' is defined but never used                       no-unused-vars
+  Line 167:13:  'nGroups' is assigned a value but never used             no-unused-vars
+
+*/
 import React from 'react';
 import { Container, Row, Button, Col } from 'reactstrap';
 import Hand from '../components/Hand';

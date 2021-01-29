@@ -40,11 +40,13 @@ class TibetMenu extends React.Component {
                         <li></li>
                     </ul>
                 </nav>
+                <Container>
                 <Switch>
                     <Route path="/tibet/:hs/:p/:s/:m/:h" component={Tibet} />
                     <Route exact path="/" component={Intro} />
                     <Route exact path='/sbr' component={SichuanClient} />
                 </Switch>
+                </Container>
             </BrowserRouter>
         );
     }
