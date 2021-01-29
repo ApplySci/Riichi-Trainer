@@ -1,4 +1,5 @@
 import React from 'react';
+import { Container } from 'reactstrap';
 import { withTranslation } from "react-i18next";
 import { BrowserRouter, Link, NavLink, Route, Switch } from 'react-router-dom';
 import Tibet from "./Tibet";
