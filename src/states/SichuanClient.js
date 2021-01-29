@@ -35,7 +35,7 @@ class SichuanClient extends React.Component {
       });
 
     }
-
+/*
     componentDidMount() {
         this.setState({}, () => this.onNewHand());
     }
@@ -59,17 +59,17 @@ class SichuanClient extends React.Component {
             settings: settings
         });
     }
-
+*/
 
     /**
      * Sets the state to a clean slate based on the given parameters.
      * @param {TileCounts} hand The player's hand.
      * @param {TileCounts} availableTiles The tiles remaining in the wall.
      * @param {TileIndex[]} tilePool A list of tile indexes representing the remaining tiles.
-     * @param {UkeireHistoryData[]} history A list of history objects.
      * @param {TileIndex} lastDraw The tile the player just drew.
      */
-    setNewHandState(hand, availableTiles, tilePool, history, lastDraw = false) {
+/*
+    setNewHandState(hand, availableTiles, tilePool, lastDraw = false) {
 
         let players = [{discards: []}];
 
@@ -84,10 +84,6 @@ class SichuanClient extends React.Component {
             tilePool: tilePool,
             players: players,
             discardCount: 0,
-            optimalCount: 0,
-            achievedTotal: 0,
-            possibleTotal: 0,
-            history: history,
             isComplete: false,
             lastDraw: lastDraw || shuffle.pop(),
             shuffle: shuffle,
@@ -110,20 +106,19 @@ class SichuanClient extends React.Component {
 
     }
 
-    /** Generates a new hand and fresh game state. */
+    // Generates a new hand and fresh game state.
     onNewHand() {
         if (this.timer != null) {
             clearTimeout(this.timer);
             clearInterval(this.timerUpdate);
         }
 
-        let history = [];
         let hand, availableTiles, tilePool;
 
-        this.setNewHandState(hand, availableTiles, tilePool, history);
+        this.setNewHandState(hand, availableTiles, tilePool);
     }
 
-    /** Discards the clicked tile, adds a message comparing its efficiency with the best tile, and draws a new tile */
+    // Discards the clicked tile
     onTileClicked(event) {
         if (this.timer != null) {
             clearTimeout(this.timer);
@@ -160,28 +155,13 @@ class SichuanClient extends React.Component {
         }
     }
 
-    /**
-     * Starts a new round with the hand the player loaded, if possible.
-     * @param {{hand:TileCounts, tiles:number, draw:TileIndex}} loadData The data from the hand parser.
-     */
-    onHandLoaded(loadData) {
-        let draw = loadData.draw;
-
-        if (draw !== false) {
-            draw = Math.min(Math.max(0, draw), 37);
-            // Ensure the drawn tile is in the hand
-            if (hand[draw] <= 0) draw = false;
-        }
-
-        this.setNewHandState(hand, availableTiles, tilePool, [], draw);
-    }
 
     componentDidUpdate(prevProps) {
         if (this.props.match.params !== prevProps.match.params) {
           this.onNewHand();
         }
     }
-
+*/
     render() {
         let { t } = this.props;
         let nGroups = Math.floor(this.props.match.params.hs/3);
