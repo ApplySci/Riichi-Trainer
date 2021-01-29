@@ -34,8 +34,8 @@ class SichuanClient extends React.Component {
     constructor(props) {
         super(props);
         this.game = new BaseGame();
-        this.onTileClicked = this.onTileClicked.bind(this);
-        this.updateTime = this.onUpdateTime.bind(this);
+        //this.onTileClicked = this.onTileClicked.bind(this);
+        //this.updateTime = this.onUpdateTime.bind(this);
         this.timerUpdate = null;
         this.timer = null;
         this.state = {
