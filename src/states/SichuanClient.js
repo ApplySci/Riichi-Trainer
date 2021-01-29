@@ -8,13 +8,15 @@ import { convertHandToTileIndexArray } from "../scripts/HandConversions";
 import { shuffleArray, removeRandomItem } from '../scripts/Utils';
 import { withTranslation } from 'react-i18next';
 import LocalizedMessage from '../models/LocalizedMessage';
-import ShowWin from "./ShowWin";
 import openSocket from 'socket.io-client';
-import GameClient from './GameClient';
+import ShowWin from "./ShowWin";
+import BaseGame from './BaseGame';
+import Player from './Player';
 
-class SichuanBloody extends React.Component {
+class SichuanClient extends React.Component {
     constructor(props) {
         super(props);
+        this.game = new BaseGame();
         this.onTileClicked = this.onTileClicked.bind(this);
         this.updateTime = this.onUpdateTime.bind(this);
         this.timerUpdate = null;
@@ -23,7 +25,7 @@ class SichuanBloody extends React.Component {
             currentBonus: 0,
             currentTime: 0,
             myTurn: false,
-            socket: openSocket('wss://ws.azps.info/'),
+            socket: openSocket('wss://ws.azps.info/')
         }
 
       let self = this
@@ -68,7 +70,6 @@ class SichuanBloody extends React.Component {
      * @param {TileIndex} lastDraw The tile the player just drew.
      */
     setNewHandState(hand, availableTiles, tilePool, history, lastDraw = false) {
-        history.unshift(new HistoryData(new LocalizedMessage("trainer.start", { hand: convertHandToTenhouString(hand) })));
 
         let players = [{discards: []}];
 
@@ -141,10 +142,8 @@ class SichuanBloody extends React.Component {
 
         this.setState({
             hand: hand,
-            players: players,
             hasCopied: false,
             isComplete: isComplete,
-            lastDraw: drawnTile,
             currentTime: this.state.settings.time,
         });
     }
@@ -219,4 +218,4 @@ class SichuanBloody extends React.Component {
     }
 }
 
-export default withTranslation()(SichuanBloody);
+export default withTranslation()(SichuanClient);

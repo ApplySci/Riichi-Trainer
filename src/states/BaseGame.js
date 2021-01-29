@@ -1,7 +1,7 @@
 export default class BaseGame {
 
     constructor(props) {
-        super(props);
+        //super(props);
         const padTile = 31;
 
         this.state = {
@@ -9,7 +9,6 @@ export default class BaseGame {
             discards: [],
             emptySuit: [],
             hands: [],
-            names: [null, null, null, null],
             players: [null, null, null, null],
             remainingTiles: [],
             scores: [0, 0, 0, 0],

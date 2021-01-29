@@ -4,6 +4,7 @@ import { BrowserRouter, Link, NavLink, Route, Switch } from 'react-router-dom';
 import Tibet from "./Tibet";
 import PopUp from "../components/PopUp";
 import Intro from "../components/Intro";
+import SichuanClient from "./SichuanClient";
 
 class TibetMenu extends React.Component {
     state = {
@@ -30,7 +31,10 @@ class TibetMenu extends React.Component {
                         <li><NavLink to='/tibet/11/1/1/1/0'>11 tiles, 3 suits</NavLink></li>
                         <li><NavLink to='/tibet/14/1/1/1/0'>14 tiles, 3 suits</NavLink></li>
                         <li><NavLink to='/tibet/14/1/1/1/1'>14 tiles, 3 suits &amp; Honours</NavLink></li>
-                        <li>Advanced:</li>
+                        <li>---------------------</li>
+                        <li><NavLink to='/sbr'>Sichuan Bloody Rules</NavLink></li>
+                        <li>---------------------</li>
+                        <li>For advanced players only:</li>
                         <li><NavLink to='/tibet/11/1/0/0/0'>11 tiles, 1 suit</NavLink></li>
                         <li><NavLink to='/tibet/14/1/0/0/0'>14 tiles, 1 suit</NavLink></li>
                         <li></li>
@@ -39,6 +43,7 @@ class TibetMenu extends React.Component {
                 <Switch>
                     <Route path="/tibet/:hs/:p/:s/:m/:h" component={Tibet} />
                     <Route exact path="/" component={Intro} />
+                    <Route exact path='/sbr' component={SichuanClient} />
                 </Switch>
             </BrowserRouter>
         );

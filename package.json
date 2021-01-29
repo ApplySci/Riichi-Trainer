@@ -18,6 +18,7 @@
     "react-router-dom": "latest",
     "react-scripts": "latest",
     "reactstrap": "latest",
+    "socket.io-client": "latest",
     "typescript": "latest"
   },
   "scripts": {

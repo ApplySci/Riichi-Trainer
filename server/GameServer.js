@@ -1,3 +1,9 @@
+import BaseGame from '../src/states/BaseGame';
+import Player from '../src/states/Player';
+import { calculateStandardShanten } from "../../src/scripts/ShantenCalculator";
+import { removeRandomItem, getRandomItem } from '../../src/scripts/Utils';
+import { convertHandToTileIndexArray } from "../../src/scripts/HandConversions";
+
 export default class GameServer extends BaseGame {
 
     constructor(props) {
@@ -7,6 +13,7 @@ export default class GameServer extends BaseGame {
         this.getStartingTiles = this.getStartingTiles.bind(this);
         this.newHand = this.newHand.bind(this);
         this.onDiscard = this.onDiscard.bind(this);
+        this.setPlayer = this.setPlayer.bind(this);
         this.setWaits = this.setWaits.bind(this);
     }
 
@@ -113,6 +120,9 @@ export default class GameServer extends BaseGame {
         return paddedHand;
     }
 
+    setPlayer(name, socket) {
+
+    }
 
     setWaits(player, waits) {
 

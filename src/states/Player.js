@@ -1,6 +1,6 @@
 export default class Player {
     constructor(props) {
-        super(props);
+        //super(props);
         this.state = {
             discards: [],
             hand: [],
@@ -9,6 +9,7 @@ export default class Player {
             gameScore: 0,
             socket: null,
             totalScore: 0,
+            voidedSuit: null,
         }
     }
 }

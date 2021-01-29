@@ -1,17 +1,20 @@
-import { isTupleTypeNode } from "typescript";
-import { calculateStandardShanten } from "../../src/scripts/ShantenCalculator";
-import { removeRandomItem, getRandomItem } from '../../src/scripts/Utils';
-import { convertHandToTileIndexArray } from "../../src/scripts/HandConversions";
-import { Game } from './Game';
+/*
 
-// const Fraud = require("fraud");  // for saving stuff to disk https://www.npmjs.com/package/fraud
+This file does the communications with the clients. It delegates all game tasks down to the GameServer object
+
+*/
+
+//import GameServer from './GameServer';
+
+//const Fraud = require("fraud");  // for saving stuff to disk https://www.npmjs.com/package/fraud
 const io = require('socket.io')(); // https://socket.io/docs/v3/emit-cheatsheet/
 
+/*
 const database = new Fraud({
     directory: "./database"
-});
+});*/
 
-const admin = database.read('admin');
+//const admin = database.read('admin');
 
 const port = 4227
 
@@ -20,7 +23,6 @@ let scores = [];
 let seat = 3; // to force a new game to be created when we add the first player
 let table = -1;
 let games = [];
-let admin = null;
 
 io.on('connection', function (socket) {
 
@@ -33,7 +35,7 @@ io.on('connection', function (socket) {
         } else {
             players[name] = socket;
         }
-        games[table].assignSeat(pSeat, name));
+        games[table].assignSeat(pSeat, name);
     }
 
     seat++;
@@ -46,9 +48,10 @@ io.on('connection', function (socket) {
             bamboo: true,
             circles: true,
         }));
+        /*
         if (admin !== null) {
             admin.join('T' + table);
-        }
+        }*/
     }
 
     pSeat = seat;
@@ -80,27 +83,28 @@ io.on('connection', function (socket) {
 
         // check victory - are any of the players at this table waiting on this discard?
 
-
-
         socket.on('claimWin', function(dummy) {
 
         });
 
-        if not
-            // rotate to next player
-        socket.to('T' + pTable).emit('turn', { table: table, turn: pSeat });
+        // handle complete game here
+        if (games.isComplete) {
+
+
+        } else {
+                // rotate to next player
+            socket.to('T' + pTable).emit('turn', { table: table, turn: pSeat });
+        }
     });
 
     socket.on('', function() {
 
     });
 
-
-
 });
 
-io.listen(port)
-console.log('Listening on port ' + port + '...')
+io.listen(port);
+console.log('Listening on port ' + port + '...');
 
 /*
 
