@@ -1,15 +1,13 @@
 export default class Player {
-    constructor(props) {
-        //super(props);
-        this.state = {
-            discards: [],
-            hand: [],
-            melds: [],
-            name: null,
-            gameScore: 0,
-            socket: null,
-            totalScore: 0,
-            voidedSuit: null,
-        }
+    constructor() {
+        this.discards = [];
+        this.hand = [2,2,2,3,3,3,4,4,5,5];
+        this.melds = [[1,1,1]];
+        this.name = '';
+        this.gameScore = 0;
+        this.socket = null;
+        this.totalScore = 0;
+        this.voidedSuit = null;
+        this.waits = [4,5];
     }
 }
