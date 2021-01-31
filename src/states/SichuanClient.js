@@ -3,10 +3,11 @@
 */
 import React from 'react';
 import { Container, Row, Button, Col } from 'reactstrap';
-import Hand from '../components/Hand';
+import SortedHand from '../components/SortedHand';
 import DiscardPool from "../components/DiscardPool";
-import withTranslation from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import LocalizedMessage from '../models/LocalizedMessage';
+import Melds from '../components/Melds';
 import openSocket from 'socket.io-client';
 import ShowWin from "./ShowWin";
 
@@ -20,7 +21,7 @@ class SichuanClient extends React.Component {
         this.state = {
             currentBonus: 0,
             currentTime: 0,
-            discards: [ [], [], [], [] ],
+            discardPiles: [ [], [], [], [] ],
             drawnTile: null,
             gameScores: [],
             hand: [2,2,2,3,3,3,4,4,5,5],
@@ -29,12 +30,14 @@ class SichuanClient extends React.Component {
             myTurn: false,
             players: [],
             settings: { useTimer: true },
+            totalScores: [],
+            voidedSuits: [],
         }
 
         let self = this
 
-        this.state.socket.on('board', board => {
-            this.setState(...self.state, {board: board})
+        this.socket.on('board', board => {
+            this.setState({board: board})
         });
 
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
@@ -50,7 +53,6 @@ class SichuanClient extends React.Component {
             clearInterval(this.timerUpdate);
         }
     }
-
 
     /**
      * Sets the state to a clean slate based on the given parameters.
@@ -117,7 +119,7 @@ class SichuanClient extends React.Component {
                         showIndexes={this.state.settings.showIndexes} />
                 </Row>
 
-                <Hand tiles={this.state.hand}
+                <SortedHand tiles={this.state.hand}
                     lastDraw={this.state.lastDraw}
                     onTileClick={this.onTileClicked}
                     showIndexes={true}
