@@ -8,12 +8,29 @@ import DiscardPool from "../components/DiscardPool";
 import { withTranslation } from 'react-i18next';
 import LocalizedMessage from '../models/LocalizedMessage';
 import Melds from '../components/Melds';
+import { calculateStandardShanten } from "../scripts/ShantenCalculator";
+
 import openSocket from 'socket.io-client';
 import ShowWin from "./ShowWin";
+
+const padTile = 31;
+
+function padHand(hand) {
+    let paddedHand = hand.slice();
+    let nTiles = paddedHand.reduce((a, b) => a + b, 0);
+    paddedHand[padTile] += 14 - nTiles;
+    return paddedHand;
+}
+
+function shortHandToArray(hand) {
+    let out = new Array(38).fill(0);
+    return out;
+}
 
 class SichuanClient extends React.Component {
     constructor(props) {
         super(props);
+        this.inEvent = false;
         this.socket = openSocket('wss://mahjong.azps.info/');
 
         this.timerUpdate = null;
@@ -27,7 +44,7 @@ class SichuanClient extends React.Component {
             hand: [2,2,2,3,3,3,4,4,5,5],
             isComplete: false,
             melds: [ [1,1,1] ],
-            myTurn: false,
+            myTurn: true,
             players: [],
             settings: { useTimer: true },
             totalScores: [],
@@ -94,16 +111,19 @@ class SichuanClient extends React.Component {
 
     // Discards the clicked tile
     onTileClicked(event) {
+        if (this.state.isComplete || this.inEvent) return;
+        this.inEvent = true;
         if (this.timer != null) {
             clearTimeout(this.timer);
             clearInterval(this.timerUpdate);
         }
-        let isComplete = this.state.isComplete;
-        if (isComplete) return;
         let chosenTile = parseInt(event.target.name);
         let hand = this.state.hand.slice();
-        hand[chosenTile]--;
+        let pos = hand.indexOf(chosenTile);
+        hand.splice(pos, 1);
         this.setState({hand: hand});
+        this.socket.emit('discard', chosenTile);
+        this.inEvent = false;
     }
 
 
@@ -116,20 +136,22 @@ class SichuanClient extends React.Component {
                         players={this.state.players}
                         discardCount={this.state.discardCount}
                         wallCount={this.state.tilePool && this.state.tilePool.length}
-                        showIndexes={this.state.settings.showIndexes} />
+                        showIndexes={true} />
                 </Row>
-
-                <SortedHand tiles={this.state.hand}
-                    lastDraw={this.state.lastDraw}
-                    onTileClick={this.onTileClicked}
-                    showIndexes={true}
-                    blind={false} />
-
+                <div className={this.state.myTurn && !this.inEvent ? "hand" : "hand noCursor"}>
+                    <SortedHand tiles={this.state.hand}
+                        lastDraw={this.state.lastDraw}
+                        onTileClick={this.state.myTurn && !this.inEvent ? this.onTileClicked : null}
+                        showIndexes={true}
+                        blind={false} />
+                    <Row>Click on a tile to discard it</Row>
+                </div>
+                <hr />
                 <Melds melds={this.state.melds} />
-
-                <Row>Click on a tile to discard it</Row>
                 {this.state.settings.useTimer ?
-                    <Row className="mt-2" style={{justifyContent:'flex-end', marginRight:1}}><span>{this.state.currentTime.toFixed(1)} + {this.state.currentBonus.toFixed(1)}</span></Row>
+                    <Row className="mt-2" style={{justifyContent:'flex-end', marginRight:1}}>
+                        <span>{this.state.currentTime.toFixed(1)} + {this.state.currentBonus.toFixed(1)}</span>
+                    </Row>
                     : ""
                 }
             </Container>

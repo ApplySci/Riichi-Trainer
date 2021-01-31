@@ -1,13 +1,17 @@
 /* AZPS content ============================================
-
-From Feb 2021:
-The year of the Ox 牛 and the year's element is Metal 金
-
 */
 
 .handTile {
     width: 6%;
     height: 6%;
+}
+
+.hand .handTile {
+  cursor: pointer;
+}
+
+.hand.noCursor .handTile {
+  cursor: wait;
 }
 
 a:hover {
@@ -19,7 +23,6 @@ a:hover {
   margin: 0.5em 0;
   border: green 2px solid;
 }
-
 
 .pickWinners .handTile {
   padding: 4px;
