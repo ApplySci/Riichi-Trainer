@@ -36,7 +36,7 @@ class SichuanClient extends React.Component {
     constructor(props) {
         super(props);
         this.inEvent = false;
-        this.socket = openSocket('wss://mahjong.azps.info/ws/');
+        this.socket = openSocket('wss://ws.mahjong.azps.info/');
 
         this.timerUpdate = null;
         this.timer = null;
@@ -50,7 +50,7 @@ class SichuanClient extends React.Component {
             handStage: HANDSTAGE.selectVoidSuit,
             isComplete: false,
             melds: [ [1,1,1] ],
-            myTurn: true,
+            myTurn: false,
             players: [],
             settings: { useTimer: true },
             totalScores: [],
@@ -136,7 +136,7 @@ class SichuanClient extends React.Component {
         let chosenTile = parseInt(event.target.name);
         let voidSuits = this.state.voidedSuits.slice();
         voidSuits[0] = chosenTile;
-        this.setState({ handStage: HANDSTAGE.firstDiscard, voidedSuits:voidSuits });
+        this.setState({ handStage: HANDSTAGE.firstDiscard, voidedSuits:voidSuits, myTurn: true }); // TODO remove myTurn here
         this.socket.emit('void', chosenTile);
     }
 
@@ -151,7 +151,7 @@ class SichuanClient extends React.Component {
                         wallCount={this.state.tilePool && this.state.tilePool.length}
                         showIndexes={true} />
                 </Row>
-                <Row className={'voidTiles hand' + (this.handStage === HANDSTAGE.selectVoidSuit ? '' : ' noCursor')}>
+                <Row className={'voidTiles hand' + (this.state.handStage === HANDSTAGE.selectVoidSuit ? '' : ' noCursor')}>
                     Void suit: {this.state.handStage === HANDSTAGE.selectVoidSuit
                     ?   <span>
                             <Tile tile={0} displayTile={2} onClick={this.pickVoid} className='handTile' />
