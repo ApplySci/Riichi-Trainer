@@ -9,11 +9,13 @@ import { withTranslation } from 'react-i18next';
 import LocalizedMessage from '../models/LocalizedMessage';
 import Melds from '../components/Melds';
 import { calculateStandardShanten } from "../scripts/ShantenCalculator";
-
-import openSocket from 'socket.io-client';
 import ShowWin from "./ShowWin";
+import openSocket from 'socket.io-client';
+import Tile from '../components/Tile';
 
 const padTile = 31;
+
+const HANDSTAGE = { selectVoidSuit: 0, firstDiscard: 1, mainHand: 2, complete: 3 };
 
 function padHand(hand) {
     let paddedHand = hand.slice();
@@ -24,6 +26,9 @@ function padHand(hand) {
 
 function shortHandToArray(hand) {
     let out = new Array(38).fill(0);
+    for (let tile of hand) {
+        out[tile]++;
+    }
     return out;
 }
 
@@ -42,6 +47,7 @@ class SichuanClient extends React.Component {
             drawnTile: null,
             gameScores: [],
             hand: [2,2,2,3,3,3,4,4,5,5],
+            handStage: HANDSTAGE.selectVoidSuit,
             isComplete: false,
             melds: [ [1,1,1] ],
             myTurn: true,
@@ -50,8 +56,6 @@ class SichuanClient extends React.Component {
             totalScores: [],
             voidedSuits: [],
         }
-
-        let self = this
 
         this.socket.on('board', board => {
             this.setState({board: board})
@@ -128,7 +132,6 @@ class SichuanClient extends React.Component {
 
 
     render() {
-        let { t } = this.props;
         return (
             <Container>
                 <Row className="mt-2 no-gutters">
@@ -138,6 +141,15 @@ class SichuanClient extends React.Component {
                         wallCount={this.state.tilePool && this.state.tilePool.length}
                         showIndexes={true} />
                 </Row>
+                <Row className={'voidTiles hand' + (this.handStage === HANDSTAGE.selectVoidSuit ? '' : ' noCursor')}>
+                    Void suit: {this.state.handStage === HANDSTAGE.selectVoidSuit
+                    ?   <span>
+                            <Tile name={1} displayTile={2} onClick={null} className='handTile' />
+                            <Tile name={2} displayTile={12} onClick={null} className='handTile' />
+                            <Tile name={3} displayTile={22} onClick={null} className='handTile' />
+                        </span>
+                    : <Tile name={null} displayTile={this.state.voidedSuits[0]*10+2} onClick={null} />
+                } </Row>
                 <div className={this.state.myTurn && !this.inEvent ? "hand" : "hand noCursor"}>
                     <SortedHand tiles={this.state.hand}
                         lastDraw={this.state.lastDraw}

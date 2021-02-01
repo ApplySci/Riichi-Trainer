@@ -14,6 +14,25 @@
   cursor: wait;
 }
 
+.voidTiles.noCursor .handTile {
+  cursor: inherit;
+}
+
+.voidTiles {
+  padding: 0.5em 0;
+}
+
+.row.voidTiles {
+  display: block;
+}
+
+.voidTiles .handTile {
+  width: 3%;
+  display: inline-block;
+  height: 100%;
+  margin-right: 0.5em;
+}
+
 a:hover {
   text-decoration: none;
 }
