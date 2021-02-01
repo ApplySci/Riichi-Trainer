@@ -36,7 +36,7 @@ class SichuanClient extends React.Component {
     constructor(props) {
         super(props);
         this.inEvent = false;
-        this.socket = openSocket('wss://mahjong.azps.info/');
+        this.socket = openSocket('wss://mahjong.azps.info/ws/');
 
         this.timerUpdate = null;
         this.timer = null;
@@ -137,8 +137,9 @@ class SichuanClient extends React.Component {
         let voidSuits = this.state.voidedSuits.slice();
         voidSuits[0] = chosenTile;
         this.setState({ handStage: HANDSTAGE.firstDiscard, voidedSuits:voidSuits });
-        console.log(event.target);
+        this.socket.emit('void', chosenTile);
     }
+
 
     render() {
         return (
