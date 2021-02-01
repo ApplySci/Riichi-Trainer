@@ -65,6 +65,7 @@ class SichuanClient extends React.Component {
         this.onTileClicked = this.onTileClicked.bind(this);
         this.updateTime = this.onUpdateTime.bind(this);
         this.setTimer = this.setTimer.bind(this);
+        this.pickVoid = this.pickVoid.bind(this);
 
     }
 
@@ -131,6 +132,14 @@ class SichuanClient extends React.Component {
     }
 
 
+    pickVoid(event) {
+        let chosenTile = parseInt(event.target.name);
+        let voidSuits = this.state.voidedSuits.slice();
+        voidSuits[0] = chosenTile;
+        this.setState({ handStage: HANDSTAGE.firstDiscard, voidedSuits:voidSuits });
+        console.log(event.target);
+    }
+
     render() {
         return (
             <Container>
@@ -144,11 +153,11 @@ class SichuanClient extends React.Component {
                 <Row className={'voidTiles hand' + (this.handStage === HANDSTAGE.selectVoidSuit ? '' : ' noCursor')}>
                     Void suit: {this.state.handStage === HANDSTAGE.selectVoidSuit
                     ?   <span>
-                            <Tile name={1} displayTile={2} onClick={null} className='handTile' />
-                            <Tile name={2} displayTile={12} onClick={null} className='handTile' />
-                            <Tile name={3} displayTile={22} onClick={null} className='handTile' />
+                            <Tile tile={0} displayTile={2} onClick={this.pickVoid} className='handTile' />
+                            <Tile tile={1} displayTile={12} onClick={this.pickVoid} className='handTile' />
+                            <Tile tile={2} displayTile={22} onClick={this.pickVoid} className='handTile' />
                         </span>
-                    : <Tile name={null} displayTile={this.state.voidedSuits[0]*10+2} onClick={null} />
+                    : <Tile name={null} displayTile={this.state.voidedSuits[0]*10+2} onClick={null} className='handTile' />
                 } </Row>
                 <div className={this.state.myTurn && !this.inEvent ? "hand" : "hand noCursor"}>
                     <SortedHand tiles={this.state.hand}
