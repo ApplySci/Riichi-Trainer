@@ -157,6 +157,7 @@ class SichuanClient extends React.Component {
             // yes, we are in tenpai
             let ukeire = calculateUkeire(longHand, fullSet, calculateStandardShanten, 0);
             newState.waits = ukeire.tiles;
+            endOfTurn.waits = ukeire.tiles;
         }
 
         // TODO are there pairs? Ask if they want to pon them, if so
@@ -194,13 +195,13 @@ class SichuanClient extends React.Component {
                         showIndexes={true} />
                 </Row>
                 <Row className={'voidTiles hand' + (this.state.handStage === HANDSTAGE.selectVoidSuit ? '' : ' noCursor')}>
-                    Void suit: {this.state.handStage === HANDSTAGE.selectVoidSuit
-                    ?   <span>
+                    {this.state.handStage === HANDSTAGE.selectVoidSuit
+                    ?   <span>Pick the void suit:
                             <Tile tile={0} displayTile={2} onClick={this.pickVoid} className='handTile' />
                             <Tile tile={1} displayTile={12} onClick={this.pickVoid} className='handTile' />
                             <Tile tile={2} displayTile={22} onClick={this.pickVoid} className='handTile' />
                         </span>
-                    : <Tile name={null} displayTile={this.state.voidedSuits[0]*10+2} onClick={null} className='handTile' />
+                    : <span>Void suit: <Tile name={null} displayTile={this.state.voidedSuits[0]*10+2} onClick={null} className='handTile' /></span>
                 } </Row>
                 { this.state.waits.length === 0 ? null : <Row className='voidTiles hand noCursor'>
                     Tiles you can win off:
