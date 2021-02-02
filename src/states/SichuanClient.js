@@ -9,12 +9,13 @@ import { withTranslation } from 'react-i18next';
 import LocalizedMessage from '../models/LocalizedMessage';
 import Melds from '../components/Melds';
 import { calculateStandardShanten } from "../scripts/ShantenCalculator";
+import {calculateUkeire} from "../scripts/UkeireCalculator";
 import ShowWin from "./ShowWin";
 import openSocket from 'socket.io-client';
 import Tile from '../components/Tile';
 
 const padTile = 31;
-
+const fullSet = Array(38).fill(4);
 const HANDSTAGE = { selectVoidSuit: 0, firstDiscard: 1, mainHand: 2, complete: 3 };
 
 function padHand(hand) {
@@ -37,7 +38,7 @@ class SichuanClient extends React.Component {
         super(props);
         this.inEvent = false;
         this.socket = openSocket('wss://ws.mahjong.azps.info/');
-
+        this.tilesGone = Array(38).fill(0);
         this.timerUpdate = null;
         this.timer = null;
         this.state = {
@@ -46,7 +47,7 @@ class SichuanClient extends React.Component {
             discardPiles: [ [], [], [], [] ],
             drawnTile: null,
             gameScores: [],
-            hand: [2,2,2,3,3,3,4,4,5,5],
+            hand: [2,2,2,3,3,3,4,4,5,5,9],
             handStage: HANDSTAGE.selectVoidSuit,
             isComplete: false,
             melds: [ [1,1,1] ],
@@ -55,18 +56,36 @@ class SichuanClient extends React.Component {
             settings: { useTimer: true },
             totalScores: [],
             voidedSuits: [],
+            waits: [],
         }
 
         this.socket.on('board', board => {
             this.setState({board: board})
         });
 
+        this.newHand = this.newHand.bind(this);
+        this.pickVoid = this.pickVoid.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.onTileClicked = this.onTileClicked.bind(this);
         this.updateTime = this.onUpdateTime.bind(this);
         this.setTimer = this.setTimer.bind(this);
-        this.pickVoid = this.pickVoid.bind(this);
 
+    }
+
+    newHand() {
+        let state = {
+            currentBonus: 0,
+            currentTime: 0,
+            discardPiles: [ [], [], [], [] ],
+            drawnTile: null,
+            hand: [],
+            handStage: HANDSTAGE.selectVoidSuit,
+            isComplete: false,
+            melds: [],
+            myTurn: false,
+            voidedSuits: [],
+        }
+        this.setState(state);
     }
 
     componentWillUnmount() {
@@ -126,8 +145,30 @@ class SichuanClient extends React.Component {
         let hand = this.state.hand.slice();
         let pos = hand.indexOf(chosenTile);
         hand.splice(pos, 1);
-        this.setState({hand: hand});
-        this.socket.emit('discard', chosenTile);
+        this.setState({ myTurn: false, hand: hand });
+        let endOfTurn = { tile: chosenTile };
+        let newState = {};
+
+        // are we now tenpai?
+        let longHand = shortHandToArray(hand);
+        longHand[padTile] += 13 - hand.length;
+        let shanten = calculateStandardShanten(longHand);
+        if (shanten === 0) {
+            // yes, we are in tenpai
+            let ukeire = calculateUkeire(longHand, fullSet, calculateStandardShanten, 0);
+            newState.waits = ukeire.tiles;
+        }
+
+        // TODO are there pairs? Ask if they want to pon them, if so
+        for (let i=0; i < hand.length - 1; i++) {
+            if (hand[i] === hand[i+1]) {
+
+            }
+        }
+
+        // and finally tell the server
+        this.setState(newState);
+        this.socket.emit('discard', endOfTurn);
         this.inEvent = false;
     }
 
@@ -142,6 +183,7 @@ class SichuanClient extends React.Component {
 
 
     render() {
+        console.log(this.state.waits);
         return (
             <Container>
                 <Row className="mt-2 no-gutters">
@@ -160,13 +202,21 @@ class SichuanClient extends React.Component {
                         </span>
                     : <Tile name={null} displayTile={this.state.voidedSuits[0]*10+2} onClick={null} className='handTile' />
                 } </Row>
+                { this.state.waits.length === 0 ? null : <Row className='voidTiles hand noCursor'>
+                    Tiles you can win off:
+                    <SortedHand tiles={this.state.waits}
+                        lastDraw={-1}
+                        onTileClick={null}
+                        showIndexes={true}
+                        blind={false} />
+                </Row> }
                 <div className={this.state.myTurn && !this.inEvent ? "hand" : "hand noCursor"}>
                     <SortedHand tiles={this.state.hand}
                         lastDraw={this.state.lastDraw}
                         onTileClick={this.state.myTurn && !this.inEvent ? this.onTileClicked : null}
                         showIndexes={true}
                         blind={false} />
-                    <Row>Click on a tile to discard it</Row>
+                    {this.state.myTurn ? <Row>Click on a tile to discard it</Row> : null}
                 </div>
                 <hr />
                 <Melds melds={this.state.melds} />
