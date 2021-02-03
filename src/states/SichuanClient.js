@@ -2,28 +2,20 @@
 
 */
 import React from 'react';
-import { Container, Row, Button, Col } from 'reactstrap';
+import { Container, Row } from 'reactstrap';
 import SortedHand from '../components/SortedHand';
+import SortedHandCheckbox from '../components/SortedHandCheckbox';
 import DiscardPool from "../components/DiscardPool";
 import { withTranslation } from 'react-i18next';
-import LocalizedMessage from '../models/LocalizedMessage';
 import Melds from '../components/Melds';
 import { calculateStandardShanten } from "../scripts/ShantenCalculator";
 import {calculateUkeire} from "../scripts/UkeireCalculator";
-import ShowWin from "./ShowWin";
 import openSocket from 'socket.io-client';
 import Tile from '../components/Tile';
 
 const padTile = 31;
 const fullSet = Array(38).fill(4);
 const HANDSTAGE = { selectVoidSuit: 0, firstDiscard: 1, mainHand: 2, complete: 3 };
-
-function padHand(hand) {
-    let paddedHand = hand.slice();
-    let nTiles = paddedHand.reduce((a, b) => a + b, 0);
-    paddedHand[padTile] += 14 - nTiles;
-    return paddedHand;
-}
 
 function shortHandToArray(hand) {
     let out = new Array(38).fill(0);
@@ -53,15 +45,14 @@ class SichuanClient extends React.Component {
             melds: [ [1,1,1] ],
             myTurn: false,
             players: [],
+            ponThis: [true, null, null, true, null, null, true, null, true, null, null], // Array(14).fill(null),
             settings: { useTimer: true },
             totalScores: [],
             voidedSuits: [],
             waits: [],
         }
 
-        this.socket.on('board', board => {
-            this.setState({board: board})
-        });
+        this.socket.on('newTile', this.addTile);
 
         this.newHand = this.newHand.bind(this);
         this.pickVoid = this.pickVoid.bind(this);
@@ -69,7 +60,16 @@ class SichuanClient extends React.Component {
         this.onTileClicked = this.onTileClicked.bind(this);
         this.updateTime = this.onUpdateTime.bind(this);
         this.setTimer = this.setTimer.bind(this);
+        this.ponChecked = this.ponChecked.bind(this);
+        this.addTile = this.addTile.bind(this);
+        this.testPons = this.testPons.bind(this);
+        this.sendPons = this.sendPons.bind(this);
 
+    }
+
+    addTile(tile) {
+        console.log('addTile');
+        console.log(tile);
     }
 
     newHand() {
@@ -83,6 +83,7 @@ class SichuanClient extends React.Component {
             isComplete: false,
             melds: [],
             myTurn: false,
+            ponThis: Array(13).fill(null),
             voidedSuits: [],
         }
         this.setState(state);
@@ -132,6 +133,27 @@ class SichuanClient extends React.Component {
         }
     }
 
+    testPons() {
+        // are there pairs? Ask if they want to pon them, if so
+        let hand =  this.state.hand;
+        let newState = {ponThis: this.state.ponThis.slice()};
+        for (let i=0; i < hand.length; i++) {
+            if (i < hand.length - 1 || hand[i] === hand[i+1]) {
+                if (newState.ponThis[i]===null) {
+                    newState.ponThis[i] = false;
+                }
+                while (hand[i] === hand[i+1]) i++;
+                // we don't want to offer pon on a winning tile
+                if (newState.waits.includes(hand[i])) {
+                    hand[i] = null;
+                }
+            } else {
+                // this tile is no longer ponnable
+                newState.ponThis[i] = null;
+            }
+        }
+        this.setState(newState);
+    }
 
     // Discards the clicked tile
     onTileClicked(event) {
@@ -160,15 +182,28 @@ class SichuanClient extends React.Component {
             endOfTurn.waits = ukeire.tiles;
         }
 
-        // TODO are there pairs? Ask if they want to pon them, if so
-        for (let i=0; i < hand.length - 1; i++) {
-            if (hand[i] === hand[i+1]) {
-
+        // are there pairs? Ask if they want to pon them, if so
+        newState.ponThis = this.state.ponThis.slice();
+        for (let i=0; i < hand.length; i++) {
+            if (i < hand.length - 1 || hand[i] === hand[i+1]) {
+                if (newState.ponThis[i]===null) {
+                    newState.ponThis[i] = false;
+                }
+                // we don't want to offer pon on a winning tile
+                if (newState.waits.includes(hand[i])) {
+                    newState.ponThis[i] = null;
+                }
+                while (hand[i] === hand[i+1]) i++; // skip over all other tiles identical to this
+            } else {
+                // this tile is no longer ponnable
+                newState.ponThis[i] = null;
             }
         }
+        endOfTurn.ponThis = newState.ponThis.slice();
+        this.setState(newState);
+        this.sendPons();
 
         // and finally tell the server
-        this.setState(newState);
         this.socket.emit('discard', endOfTurn);
         this.inEvent = false;
     }
@@ -183,8 +218,29 @@ class SichuanClient extends React.Component {
     }
 
 
+    ponChecked(event) {
+        // triggered when a pon checkbox is changed
+        let tileIndex = parseInt(event.target.name.substr(2,99));
+        let ponThis = this.state.ponThis.slice();
+        let ponPos = this.state.hand.indexOf(tileIndex);
+        ponThis[ponPos] = !ponThis[ponPos];
+        this.setState({ ponThis: ponThis });
+        this.sendPons();
+    }
+
+
+    sendPons() {
+        let pons = [];
+        for (let i=0; i < this.state.ponThis.length; i++) {
+            if (this.state.ponThis[i]) {
+                pons.push(this.state.hand[i]);
+            }
+        }
+        this.socket.emit('pons', pons);
+    }
+
+
     render() {
-        console.log(this.state.waits);
         return (
             <Container>
                 <Row className="mt-2 no-gutters">
@@ -196,7 +252,7 @@ class SichuanClient extends React.Component {
                 </Row>
                 <Row className={'voidTiles hand' + (this.state.handStage === HANDSTAGE.selectVoidSuit ? '' : ' noCursor')}>
                     {this.state.handStage === HANDSTAGE.selectVoidSuit
-                    ?   <span>Pick the void suit:
+                    ?   <span><b>Pick the void suit:</b>
                             <Tile tile={0} displayTile={2} onClick={this.pickVoid} className='handTile' />
                             <Tile tile={1} displayTile={12} onClick={this.pickVoid} className='handTile' />
                             <Tile tile={2} displayTile={22} onClick={this.pickVoid} className='handTile' />
@@ -204,7 +260,7 @@ class SichuanClient extends React.Component {
                     : <span>Void suit: <Tile name={null} displayTile={this.state.voidedSuits[0]*10+2} onClick={null} className='handTile' /></span>
                 } </Row>
                 { this.state.waits.length === 0 ? null : <Row className='voidTiles hand noCursor'>
-                    Tiles you can win off:
+                    You are now ready to win this hand! The tiles you can win off are:
                     <SortedHand tiles={this.state.waits}
                         lastDraw={-1}
                         onTileClick={null}
@@ -212,12 +268,14 @@ class SichuanClient extends React.Component {
                         blind={false} />
                 </Row> }
                 <div className={this.state.myTurn && !this.inEvent ? "hand" : "hand noCursor"}>
-                    <SortedHand tiles={this.state.hand}
+                    <SortedHandCheckbox tiles={this.state.hand}
+                        checked={this.state.ponThis}
+                        checkedFn={this.ponChecked}
                         lastDraw={this.state.lastDraw}
                         onTileClick={this.state.myTurn && !this.inEvent ? this.onTileClicked : null}
                         showIndexes={true}
                         blind={false} />
-                    {this.state.myTurn ? <Row>Click on a tile to discard it</Row> : null}
+                    {this.state.myTurn ? <Row><b>Click on a tile to discard it</b></Row> : null}
                 </div>
                 <hr />
                 <Melds melds={this.state.melds} />

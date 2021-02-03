@@ -17,6 +17,7 @@
     "react-numeric-input": "latest",
     "react-router-dom": "latest",
     "react-scripts": "latest",
+    "react-toggle": "latest",
     "reactstrap": "latest",
     "socket.io-client": "latest",
     "typescript": "latest"

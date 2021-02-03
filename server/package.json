@@ -9,6 +9,7 @@
     "nodemon": "latest"
   },
   "scripts": {
-    "start": "npx serve"
+    "start": "nodemon server.js",
+    "local": "nodemon server.js localhost"
   }
 }

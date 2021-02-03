@@ -14,7 +14,7 @@
   cursor: wait;
 }
 
-.voidTiles span {
+.hand span, .voidTiles span {
   color: black;
 }
 
