@@ -8,7 +8,6 @@ function TileCheckbox(props) {
     let { t } = useTranslation();
 
     let displayTile = props.displayTile || props.tile;
-
     return (
         <div className={props.className}>
             <img
@@ -25,7 +24,7 @@ function TileCheckbox(props) {
                     <label><Toggle
                         name={'cb' + props.tile}
                         value={props.tile}
-                        defaultChecked={props.checked}
+                        checked={props.checked}
                         onChange={props.checkedFn} />
                     Pon!</label>
                 </span>

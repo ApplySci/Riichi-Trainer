@@ -192,6 +192,8 @@ class SichuanClient extends React.Component {
                 // we don't want to offer pon on a winning tile
                 if (newState.waits.includes(hand[i])) {
                     newState.ponThis[i] = null;
+                } else if (newState.waits.length && newState.ponThis[i]) {
+                    newState.ponThis[i] = false;
                 }
                 while (hand[i] === hand[i+1]) i++; // skip over all other tiles identical to this
             } else {
