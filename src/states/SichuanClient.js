@@ -182,11 +182,21 @@ class SichuanClient extends React.Component {
         longHand[padTile] += 13 - hand.length;
         let shanten = calculateStandardShanten(longHand);
         let nowWeAreReady = false;
-        if (shanten === 0) { // TODO check that the void suit is actually void!
+        if (shanten === 0) {
+            // check that the void suit is actually void!
             nowWeAreReady = true;
-            // yes, we are ready
-            let ukeire = calculateUkeire(longHand, fullSet, calculateStandardShanten, 0);
-            waits = ukeire.tiles;
+            let base = this.state.voidedSuits[0] * 10 + 1;
+            for (let i=base; i < base + 10; i++) {
+                if (hand.includes(i)) {
+                    nowWeAreReady = false;
+                    break;
+                }
+            }
+            if (nowWeAreReady) {
+                // yes, we are ready
+                let ukeire = calculateUkeire(longHand, fullSet, calculateStandardShanten, 0);
+                waits = ukeire.tiles;
+            }
         }
         endOfTurn.waits = waits;
         let nextFn;
