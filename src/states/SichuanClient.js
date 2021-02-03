@@ -177,24 +177,27 @@ class SichuanClient extends React.Component {
         let endOfTurn = { tile: chosenTile };
         let waits = [];
 
-        // are we now tenpai?
+        // are we now ready?
         let longHand = shortHandToArray(hand);
         longHand[padTile] += 13 - hand.length;
         let shanten = calculateStandardShanten(longHand);
         let nowWeAreReady = false;
         if (shanten === 0) { // TODO check that the void suit is actually void!
             nowWeAreReady = true;
-            // yes, we are in tenpai
+            // yes, we are ready
             let ukeire = calculateUkeire(longHand, fullSet, calculateStandardShanten, 0);
             waits = ukeire.tiles;
         }
         endOfTurn.waits = waits;
-        let nextFn = this.ponThis;
+        let nextFn;
         if (nowWeAreReady && !this.state.isReady) {
             // we have just become ready
             for (let i=0; i < ponThis.length; i++) {
                 if (ponThis[i]) ponThis[i] = false;
             }
+            nextFn = null;
+        } else {
+            nextFn = this.testPons;
         }
         this.setState({ myTurn: false, hand: hand, waits: waits, ponThis: ponThis }, nextFn);
 
