@@ -9,18 +9,19 @@ function Melds(props) {
     }
 
     const tiles = [];
+    let index = 100;
     for (let meld of props.melds) {
         for (let oneTile of meld) {
             tiles.push((
                 <Tile className="handTile"
-                    key=''
+                    key={'' + oneTile + '' + index++}
                     tile={oneTile}
                     onClick={null}
                     showIndexes={true}
                 />
             ));
         }
-        tiles.push(<span className='handTile'></span>);
+        tiles.push(<span className='handTile' key={'meldspan' + index++}></span>);
     }
     return (
         <Row className='melds'>

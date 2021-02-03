@@ -29,7 +29,7 @@ class SichuanClient extends React.Component {
     constructor(props) {
         super(props);
         this.inEvent = false;
-        this.socket = openSocket('wss://ws.mahjong.azps.info/');
+        this.socket = openSocket('wss://mahjong.azps.info/');
         this.tilesGone = Array(38).fill(0);
         this.timerUpdate = null;
         this.timer = null;
@@ -39,9 +39,10 @@ class SichuanClient extends React.Component {
             discardPiles: [ [], [], [], [] ],
             drawnTile: null,
             gameScores: [],
-            hand: [2,2,2,3,3,3,4,4,5,5,9],
+            hand: [2,2,2,3,3,3,4,4,5,5,9], // []
             handStage: HANDSTAGE.selectVoidSuit,
             isComplete: false,
+            isReady: false,
             melds: [ [1,1,1] ],
             myTurn: false,
             players: [],
@@ -57,7 +58,7 @@ class SichuanClient extends React.Component {
         this.newHand = this.newHand.bind(this);
         this.pickVoid = this.pickVoid.bind(this);
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
-        this.onTileClicked = this.onTileClicked.bind(this);
+        this.onDiscard = this.onDiscard.bind(this);
         this.updateTime = this.onUpdateTime.bind(this);
         this.setTimer = this.setTimer.bind(this);
         this.ponChecked = this.ponChecked.bind(this);
@@ -81,6 +82,7 @@ class SichuanClient extends React.Component {
             hand: [],
             handStage: HANDSTAGE.selectVoidSuit,
             isComplete: false,
+            isReady: false,
             melds: [],
             myTurn: false,
             ponThis: Array(13).fill(null),
@@ -109,9 +111,7 @@ class SichuanClient extends React.Component {
             this.timer = setTimeout(
                 () => {
                     this.onTileClicked({target:{name:this.state.lastDraw}});
-                    this.setState({
-                        currentBonus: 0
-                    });
+                    this.setState({ currentBonus: 0 });
                 },
                 (this.state.settings.time + this.state.settings.extraTime + 2) * 1000
             );
@@ -135,78 +135,72 @@ class SichuanClient extends React.Component {
 
     testPons() {
         // are there pairs? Ask if they want to pon them, if so
-        let hand =  this.state.hand;
-        let newState = {ponThis: this.state.ponThis.slice()};
+        const hand = this.state.hand;
+        let ponThis = this.state.ponThis.slice();
+        console.log(ponThis);
+        console.log(hand);
         for (let i=0; i < hand.length; i++) {
-            if (i < hand.length - 1 || hand[i] === hand[i+1]) {
-                if (newState.ponThis[i]===null) {
-                    newState.ponThis[i] = false;
+            if (i < hand.length - 1 && hand[i] === hand[i+1]) {
+                if (ponThis[i]===null) {
+                    ponThis[i] = false;
                 }
                 while (hand[i] === hand[i+1]) i++;
                 // we don't want to offer pon on a winning tile
-                if (newState.waits.includes(hand[i])) {
-                    hand[i] = null;
+                if (this.state.waits.includes(hand[i])) {
+                    ponThis[i] = null;
                 }
             } else {
                 // this tile is no longer ponnable
-                newState.ponThis[i] = null;
+                ponThis[i] = null;
             }
         }
-        this.setState(newState);
+        console.log(ponThis);
+        this.setState({ ponThis: ponThis }, this.sendPons);
     }
 
     // Discards the clicked tile
-    onTileClicked(event) {
+    onDiscard(event) {
         if (this.state.isComplete || this.inEvent) return;
-        this.inEvent = true;
+        this.inEvent = true; // flag to prevent user clicking two discards and us having to handle both
         if (this.timer != null) {
             clearTimeout(this.timer);
             clearInterval(this.timerUpdate);
         }
         let chosenTile = parseInt(event.target.name);
         let hand = this.state.hand.slice();
-        let pos = hand.indexOf(chosenTile);
+        let pos = hand.lastIndexOf(chosenTile);
         hand.splice(pos, 1);
-        this.setState({ myTurn: false, hand: hand });
+        let ponThis = this.state.ponThis.slice();
+        ponThis.splice(pos,1);
+        ponThis.push(null);
+
         let endOfTurn = { tile: chosenTile };
-        let newState = {};
+        let waits = [];
 
         // are we now tenpai?
         let longHand = shortHandToArray(hand);
         longHand[padTile] += 13 - hand.length;
         let shanten = calculateStandardShanten(longHand);
-        if (shanten === 0) {
+        let nowWeAreReady = false;
+        if (shanten === 0) { // TODO check that the void suit is actually void!
+            nowWeAreReady = true;
             // yes, we are in tenpai
             let ukeire = calculateUkeire(longHand, fullSet, calculateStandardShanten, 0);
-            newState.waits = ukeire.tiles;
-            endOfTurn.waits = ukeire.tiles;
+            waits = ukeire.tiles;
         }
-
-        // are there pairs? Ask if they want to pon them, if so
-        newState.ponThis = this.state.ponThis.slice();
-        for (let i=0; i < hand.length; i++) {
-            if (i < hand.length - 1 || hand[i] === hand[i+1]) {
-                if (newState.ponThis[i]===null) {
-                    newState.ponThis[i] = false;
-                }
-                // we don't want to offer pon on a winning tile
-                if (newState.waits.includes(hand[i])) {
-                    newState.ponThis[i] = null;
-                } else if (newState.waits.length && newState.ponThis[i]) {
-                    newState.ponThis[i] = false;
-                }
-                while (hand[i] === hand[i+1]) i++; // skip over all other tiles identical to this
-            } else {
-                // this tile is no longer ponnable
-                newState.ponThis[i] = null;
+        endOfTurn.waits = waits;
+        let nextFn = this.ponThis;
+        if (nowWeAreReady && !this.state.isReady) {
+            // we have just become ready
+            for (let i=0; i < ponThis.length; i++) {
+                if (ponThis[i]) ponThis[i] = false;
             }
         }
-        endOfTurn.ponThis = newState.ponThis.slice();
-        this.setState(newState);
-        this.sendPons();
+        this.setState({ myTurn: false, hand: hand, waits: waits, ponThis: ponThis }, nextFn);
 
         // and finally tell the server
         this.socket.emit('discard', endOfTurn);
+
         this.inEvent = false;
     }
 
@@ -226,8 +220,7 @@ class SichuanClient extends React.Component {
         let ponThis = this.state.ponThis.slice();
         let ponPos = this.state.hand.indexOf(tileIndex);
         ponThis[ponPos] = !ponThis[ponPos];
-        this.setState({ ponThis: ponThis });
-        this.sendPons();
+        this.setState({ ponThis: ponThis }, this.sendPons);
     }
 
 
@@ -249,7 +242,7 @@ class SichuanClient extends React.Component {
                     <DiscardPool
                         players={this.state.players}
                         discardCount={this.state.discardCount}
-                        wallCount={this.state.tilePool && this.state.tilePool.length}
+                        wallCount={this.state.tilesLeft}
                         showIndexes={true} />
                 </Row>
                 <Row className={'voidTiles hand' + (this.state.handStage === HANDSTAGE.selectVoidSuit ? '' : ' noCursor')}>
@@ -274,7 +267,7 @@ class SichuanClient extends React.Component {
                         checked={this.state.ponThis}
                         checkedFn={this.ponChecked}
                         lastDraw={this.state.lastDraw}
-                        onTileClick={this.state.myTurn && !this.inEvent ? this.onTileClicked : null}
+                        onTileClick={this.state.myTurn && !this.inEvent ? this.onDiscard : null}
                         showIndexes={true}
                         blind={false} />
                     {this.state.myTurn ? <Row><b>Click on a tile to discard it</b></Row> : null}

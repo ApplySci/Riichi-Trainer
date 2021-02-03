@@ -17,7 +17,7 @@ function SortedHand(props) {
     for (let i = 0; i < hand.length; i++) {
         tiles.push((
             <Tile className="handTile"
-                key={index++}
+                key={'' + hand[i] + index++}
                 tile={hand[i]}
                 onClick={props.onTileClick}
                 showIndexes={props.showIndexes}
@@ -28,7 +28,7 @@ function SortedHand(props) {
     if (lastDraw > -1) {
         tiles.push((
             <Tile className="handTile"
-                key={index++}
+                key={'' + lastDraw + index++}
                 tile={lastDraw}
                 onClick={props.onTileClick}
                 showIndexes={props.showIndexes}

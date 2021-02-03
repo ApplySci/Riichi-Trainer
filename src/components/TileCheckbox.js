@@ -23,7 +23,7 @@ function TileCheckbox(props) {
                 <span className="tileCheckbox">
                     <label><Toggle
                         name={'cb' + props.tile}
-                        value={props.tile}
+                        value={'' + props.tile}
                         checked={props.checked}
                         onChange={props.checkedFn} />
                     Pon!</label>
