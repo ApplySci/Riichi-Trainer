@@ -32,7 +32,6 @@ class SichuanClient extends React.Component {
     constructor(props) {
         super(props);
         this.inEvent = false;
-        this.log = <hr/>;
         this.socket = openSocket('wss://ws.azps.info/');
         this.tilesGone = Array(38).fill(0);
         this.timerUpdate = null;
@@ -55,6 +54,7 @@ class SichuanClient extends React.Component {
             handStage: HANDSTAGE.selectVoidSuit,
             isComplete: false,
             isReady: false,
+            log: <hr/>,
             myTurn: false,
             players: [],
             settings: { useTimer: true },
@@ -85,7 +85,7 @@ class SichuanClient extends React.Component {
 
 
     addTile(tile) {
-        this.setState({ log: this.log + <p>newTile: {tile}</p> });
+        this.setState({ log: this.state.log + <p>newTile: {tile}</p> });
     }
 
 
@@ -99,7 +99,7 @@ class SichuanClient extends React.Component {
             handStage: HANDSTAGE.selectVoidSuit,
             isComplete: false,
             isReady: false,
-            log: this.log + <p>newHand: {tiles}</p>,
+            log: <p>newHand: {tiles}</p>,
             melds: [],
             myTurn: false,
             ponThis: Array(13).fill(null),
@@ -110,12 +110,12 @@ class SichuanClient extends React.Component {
 
 
     onHello(greeting) {
-        this.setState({ log: this.log + <p>hello: {greeting}</p> });
+        this.setState({ log: this.state.log + <p>hello: {greeting}</p> });
     }
 
 
     otherDiscard(discard) {
-        this.setState({ log: this.log + <p>discard: {discard}</p> });
+        this.setState({ log: this.state.log + <p>discard: {discard}</p> });
     }
 
 
@@ -322,7 +322,7 @@ class SichuanClient extends React.Component {
                     </Row>
                     : ""
                 }
-                <Container>{this.log}</Container>
+                <Container>{this.state.log}</Container>
             </Container>
         );
     }
