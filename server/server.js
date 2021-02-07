@@ -7,6 +7,8 @@ This file does the communications with the clients. It delegates all game tasks 
 //import GameServer from './GameServer';
 
 //const Fraud = require("fraud");  // for saving stuff to disk https://www.npmjs.com/package/fraud
+//const app = require('express')();
+const httpServer = require('http').Server(); // (app)
 const io = require('socket.io')(httpServer, {
     cors: {
       origin: "https://azps.info",
