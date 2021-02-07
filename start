@@ -1,0 +1,28 @@
+#!/bin/bash
+
+export TMPDIR=/home/model/apps/node2/tmp
+mkdir -p $TMPDIR
+
+SERVERPIDFILE="/home/model/apps/node2/tmp/servernode.pid"
+CLIENTPIDFILE="/home/model/apps/node2/tmp/clientnode.pid"
+# BINCMD="/usr/bin/npx serve -p 17451 -s"
+PTH="/home/model/apps/node2/Riichi-Trainer"
+SERVERCMD="/usr/bin/npm run server"
+CLIENTCMD="/usr/bin/npm run client"
+LOGDIR="/home/model/logs/apps/node2"
+
+if [ -e "$SERVERPIDFILE" ] && (pgrep -u model | grep -x -f $SERVERPIDFILE &> /dev/null); then
+  echo "Server for node2 already running."
+  exit 99
+fi
+
+if [ -e "$CLIENTPIDFILE" ] && (pgrep -u model | grep -x -f $CLIENTPIDFILE &> /dev/null); then
+  echo "Client for node2 already running."
+  exit 99
+fi
+
+cd $PTH/server
+/usr/sbin/daemonize -v -c $PTH/server -e $LOGDIR/server_error.log -o $LOGDIR/server_output.log -p $SERVERPIDFILE $SERVERCMD
+
+cd $PTH
+/usr/sbin/daemonize -v -c $PTH -e $LOGDIR/client_error.log -o $LOGDIR/client_output.log -p $CLIENTPIDFILE $CLIENTCMD

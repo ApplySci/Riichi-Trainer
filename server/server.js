@@ -10,9 +10,11 @@ const port = 4227
 
 let players = {};
 let scores = [];
-let seat = 3; // to force a new game to be created when we add the first player
-let table = -1;
 let games = [];
+
+// to force a new game to be created when we add the first player
+let seat = 3;
+let table = -1;
 
 io.on('connection', function (socket) {
     console.log(socket);
@@ -46,13 +48,13 @@ io.on('connection', function (socket) {
     socket.on('pons', function(pons) {
         console.log('pons:');
         console.log(pons);
-        io.emit('winningtiles',  { table: pTable, seat: pSeat, pons: pons });
+        io.emit('pons',  { table: pTable, seat: pSeat, pons: pons });
     });
 
     socket.on('voidsuit', function(suit) {
         console.log('voided suit:');
         console.log(suit);
-        io.emit('void', { table: pTable, player: pSeat, voidsuit: suit });
+        io.emit('void', { table: pTable, seat: pSeat, voidsuit: suit });
     });
 
     socket.on('discard', function(discard) {

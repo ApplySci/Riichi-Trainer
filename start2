@@ -1,0 +1,12 @@
+#!/bin/bash
+
+PTH="/home/model/apps/node2/Riichi-Trainer"
+SERVERCMD="/usr/bin/npm run server"
+CLIENTCMD="/usr/bin/npm run client"
+LOGDIR="/home/model/logs/apps/node2"
+
+cd $PTH/server
+$SERVERCMD 2> $LOGDIR/server_error.log > $LOGDIR/server_output.log &
+
+cd $PTH
+$CLIENTCMD 2> $LOGDIR/client_error.log > $LOGDIR/client_output.log &
