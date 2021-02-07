@@ -37,19 +37,25 @@ class SichuanClient extends React.Component {
         this.timerUpdate = null;
         this.timer = null;
         this.state = {
+            discardPiles: [ [21,23], [25,27], [31,35], [32,38] ],
+            ponThis: [true, null, null, true, null, null, true, null, true, null, null],
+            hand: [2,2,2,3,3,3,4,4,5,5,9],
+            melds: [ [1,1,1] ],
+/*
+            discardPiles: [ [], [], [], [] ],
+            ponThis: Array(14).fill(null),
+            hand: [],
+            melds: [],
+*/
             currentBonus: 0,
             currentTime: 0,
-            discardPiles: [ [], [], [], [] ],
             drawnTile: null,
             gameScores: [],
-            hand: [], // [2,2,2,3,3,3,4,4,5,5,9], //
             handStage: HANDSTAGE.selectVoidSuit,
             isComplete: false,
             isReady: false,
-            melds: [], // [ [1,1,1] ], //
             myTurn: false,
             players: [],
-            ponThis: Array(14).fill(null), // [true, null, null, true, null, null, true, null, true, null, null], //
             settings: { useTimer: true },
             totalScores: [],
             voidedSuits: [],
