@@ -62,6 +62,7 @@ class SichuanClient extends React.Component {
             waits: [],
         }
 
+        this.socket.on('hello', this.onHello);
         this.socket.on('discard', this.otherDiscard);
         this.socket.on('newTile', this.addTile);
         this.socket.on('newHand', this.newHand);
@@ -70,6 +71,7 @@ class SichuanClient extends React.Component {
         this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.newHand = this.newHand.bind(this);
         this.onDiscard = this.onDiscard.bind(this);
+        this.onHello = this.onHello.bind(this);
         this.otherDiscard = this.otherDiscard.bind(this);
         this.pickVoid = this.pickVoid.bind(this);
         this.ponChecked = this.ponChecked.bind(this);
@@ -106,7 +108,14 @@ class SichuanClient extends React.Component {
     }
 
 
+    onHello(greeting) {
+        console.log('hello');
+        console.log(greeting);
+    }
+
+
     otherDiscard(discard) {
+        console.log('other discard');
         console.log(discard);
     }
 

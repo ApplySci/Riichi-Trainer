@@ -5,6 +5,7 @@
   "homepage": "./",
   "dependencies": {
     "bootstrap": "latest",
+    "concurrently": "latest",
     "cross-env": "latest",
     "i18next": "latest",
     "i18next-browser-languagedetector": "latest",
@@ -23,7 +24,7 @@
     "typescript": "latest"
   },
   "scripts": {
-    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "client": "react-scripts start",
     "server": "cd server && npm run start",
     "build": "react-scripts build",
