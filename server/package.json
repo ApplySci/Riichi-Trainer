@@ -11,7 +11,7 @@
     "nodemon": "latest"
   },
   "scripts": {
-    "start": "nodemon server.js > server.log 2> server.log",
-    "local": "nodemon server.js localhost"
+    "server": "nodemon server.js > server.log 2> server.log",
+    "local": "nodemon server.js localhost > server.log 2> server.log"
   }
 }

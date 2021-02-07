@@ -1,7 +1,7 @@
 const httpServer = require('http').Server(); // (app)
 const io = require('socket.io')(httpServer, {
     cors: {
-      origin: "https://azps.info",
+      origin: [/azps\.info$/, /localhost/],
       methods: ["GET", "POST"]
     }
   });
