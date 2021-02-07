@@ -4,7 +4,9 @@
   "private": true,
   "homepage": "./",
   "dependencies": {
+    "cors": "latest",
     "fraud": "latest",
+    "httpServer": "latest",
     "socket.io": "latest",
     "nodemon": "latest"
   },

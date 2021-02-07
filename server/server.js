@@ -7,7 +7,12 @@ This file does the communications with the clients. It delegates all game tasks 
 //import GameServer from './GameServer';
 
 //const Fraud = require("fraud");  // for saving stuff to disk https://www.npmjs.com/package/fraud
-const io = require('socket.io')(); // https://socket.io/docs/v3/emit-cheatsheet/
+const io = require('socket.io')(httpServer, {
+    cors: {
+      origin: "https://azps.info",
+      methods: ["GET", "POST"]
+    }
+  }); // https://socket.io/docs/v3/emit-cheatsheet/
 
 /*
 const database = new Fraud({
@@ -26,7 +31,7 @@ let games = [];
 
 io.on('connection', function (socket) {
     console.log(socket);
-    
+
     let pSeat;
     let pTable;
 
