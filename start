@@ -6,7 +6,7 @@ mkdir -p $TMPDIR
 SERVERPIDFILE="/home/model/apps/node2/tmp/servernode.pid"
 CLIENTPIDFILE="/home/model/apps/node2/tmp/clientnode.pid"
 # BINCMD="/usr/bin/npx serve -p 17451 -s"
-PTH="/home/model/apps/node2/Riichi-Trainer"
+PTH="/home/model/apps/node2/sichuan"
 SERVERCMD="/usr/bin/npm run server"
 CLIENTCMD="/usr/bin/npm run client"
 LOGDIR="/home/model/logs/apps/node2"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PTH="/home/model/apps/node2/Riichi-Trainer"
+PTH="/home/model/apps/node2/sichuan"
 SERVERCMD="/usr/bin/npm run daemon"
 CLIENTCMD="/usr/bin/npm run client"
 LOGDIR="/home/model/logs/apps/node2"
