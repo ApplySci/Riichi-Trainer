@@ -25,7 +25,8 @@ let table = -1;
 let games = [];
 
 io.on('connection', function (socket) {
-
+    console.log(socket);
+    
     let pSeat;
     let pTable;
 
@@ -62,16 +63,20 @@ io.on('connection', function (socket) {
     socket.join('T' + table);
 
     socket.on('disconnect', function () {
+        console.log('disconnect');
         // TODO socketsToSeats.delete(socket);
     });
 
     socket.on('name', gotName);
 
     socket.on('winningTiles', function(tiles) {
-
+        console.log('winning tiles');
+        console.log(tiles);
     });
 
     socket.on('discard', function(discard) {
+        console.log('discard');
+        console.log(discard);
         // is the game live
 
         // is it this player's turn?
