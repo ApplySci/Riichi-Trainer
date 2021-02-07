@@ -244,6 +244,7 @@ class SichuanClient extends React.Component {
         let ponPos = this.state.hand.indexOf(tileIndex);
         ponThis[ponPos] = !ponThis[ponPos];
         this.setState({ ponThis: ponThis }, this.sendPons);
+        this.socket.emit('pon', {tile: tileIndex, pon: ponThis[ponPos]});
     }
 
 

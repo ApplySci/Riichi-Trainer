@@ -23,6 +23,7 @@
     "typescript": "latest"
   },
   "scripts": {
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "client": "react-scripts start",
     "server": "cd server && nodemon server.js",
     "build": "react-scripts build",
