@@ -32,6 +32,7 @@ class SichuanClient extends React.Component {
     constructor(props) {
         super(props);
         this.inEvent = false;
+        this.log = <hr/>;
         this.socket = openSocket('wss://ws.azps.info/');
         this.tilesGone = Array(38).fill(0);
         this.timerUpdate = null;
@@ -84,8 +85,7 @@ class SichuanClient extends React.Component {
 
 
     addTile(tile) {
-        console.log('addTile');
-        console.log(tile);
+        this.setState({ log: this.log + <p>newTile: {tile}</p> });
     }
 
 
@@ -99,6 +99,7 @@ class SichuanClient extends React.Component {
             handStage: HANDSTAGE.selectVoidSuit,
             isComplete: false,
             isReady: false,
+            log: this.log + <p>newHand: {tiles}</p>,
             melds: [],
             myTurn: false,
             ponThis: Array(13).fill(null),
@@ -109,14 +110,12 @@ class SichuanClient extends React.Component {
 
 
     onHello(greeting) {
-        console.log('hello');
-        console.log(greeting);
+        this.setState({ log: this.log + <p>hello: {greeting}</p> });
     }
 
 
     otherDiscard(discard) {
-        console.log('other discard');
-        console.log(discard);
+        this.setState({ log: this.log + <p>discard: {discard}</p> });
     }
 
 
@@ -323,6 +322,7 @@ class SichuanClient extends React.Component {
                     </Row>
                     : ""
                 }
+                <Container>{this.log}</Container>
             </Container>
         );
     }
