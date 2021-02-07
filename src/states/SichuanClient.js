@@ -54,7 +54,7 @@ class SichuanClient extends React.Component {
             handStage: HANDSTAGE.selectVoidSuit,
             isComplete: false,
             isReady: false,
-            log: [<hr/>],
+            log: <hr/>,
             myTurn: false,
             players: [],
             settings: { useTimer: true },
@@ -85,7 +85,7 @@ class SichuanClient extends React.Component {
 
 
     addTile(tile) {
-        this.setState({ log: this.state.log.push(<p>newTile: {JSON.stringify(tile)}</p>) });
+        this.setState({ log: this.state.log + <p>newTile: {JSON.stringify(tile)}</p> });
     }
 
 
@@ -99,7 +99,7 @@ class SichuanClient extends React.Component {
             handStage: HANDSTAGE.selectVoidSuit,
             isComplete: false,
             isReady: false,
-            log: [<p>newHand: {JSON.stringify(tiles)}</p>],
+            log: this.state.log + <p>newHand: {JSON.stringify(tiles)}</p>,
             melds: [],
             myTurn: false,
             ponThis: Array(13).fill(null),
@@ -110,12 +110,12 @@ class SichuanClient extends React.Component {
 
 
     onHello(greeting) {
-        this.setState({ log: this.state.log.push(<p>hello: {JSON.stringify(greeting)}</p>) });
+        this.setState({ log: this.state.log + <p>hello: {JSON.stringify(greeting)}</p> });
     }
 
 
     otherDiscard(discard) {
-        this.setState({ log: this.state.log.push(<p>discard: {JSON.stringify(discard)}</p>) });
+        this.setState({ log: this.state.log + <p>discard: {JSON.stringify(discard)}</p> });
     }
 
 
