@@ -40,22 +40,25 @@ io.on('connection', function (socket) {
     socket.on('winningtiles', function(tiles) {
         console.log('winning tiles:');
         console.log(tiles);
+        io.emit('winningtiles',  { table: pTable, seat: pSeat, winningtiles: tiles });
     });
 
     socket.on('pons', function(pons) {
         console.log('pons:');
         console.log(pons);
+        io.emit('winningtiles',  { table: pTable, seat: pSeat, pons: pons });
     });
 
     socket.on('voidsuit', function(suit) {
         console.log('voided suit:');
         console.log(suit);
+        io.emit('void', { table: pTable, player: pSeat, voidsuit: suit });
     });
 
     socket.on('discard', function(discard) {
         console.log('discard:');
         console.log(discard);
-        socket.to('T' + pTable).emit('discard', { table: pTable, seat: pSeat, discard: discard });
+        io.to('T' + pTable).emit('discard', { table: pTable, seat: pSeat, discard: discard });
     });
 });
 
