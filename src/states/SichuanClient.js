@@ -54,7 +54,6 @@ class SichuanClient extends React.Component {
             handStage: HANDSTAGE.selectVoidSuit,
             isComplete: false,
             isReady: false,
-            log: <hr/>,
             myTurn: false,
             players: [],
             settings: { useTimer: true },
@@ -85,11 +84,14 @@ class SichuanClient extends React.Component {
 
 
     addTile(tile) {
-        this.setState({ log: this.state.log + <p>newTile: {JSON.stringify(tile)}</p> });
+        console.log('addtile');
+        console.log(tile);
     }
 
 
     newHand(tiles) {
+        console.log('newHand');
+        console.log(tiles);
         let state = {
             currentBonus: 0,
             currentTime: 0,
@@ -99,7 +101,6 @@ class SichuanClient extends React.Component {
             handStage: HANDSTAGE.selectVoidSuit,
             isComplete: false,
             isReady: false,
-            log: this.state.log + <p>newHand: {JSON.stringify(tiles)}</p>,
             melds: [],
             myTurn: false,
             ponThis: Array(13).fill(null),
@@ -110,12 +111,14 @@ class SichuanClient extends React.Component {
 
 
     onHello(greeting) {
-        this.setState({ log: this.state.log + <p>hello: {JSON.stringify(greeting)}</p> });
+        console.log('hello');
+        console.log(greeting);
     }
 
 
     otherDiscard(discard) {
-        this.setState({ log: this.state.log + <p>discard: {JSON.stringify(discard)}</p> });
+        console.log('discard');
+        console.log(discard);
     }
 
 
@@ -160,8 +163,6 @@ class SichuanClient extends React.Component {
         // are there pairs? Ask if they want to pon them, if so
         const hand = this.state.hand;
         let ponThis = this.state.ponThis.slice();
-        console.log(ponThis);
-        console.log(hand);
         for (let i=0; i < hand.length; i++) {
             if (i < hand.length - 1 && hand[i] === hand[i+1]) {
                 if (ponThis[i]===null) {
@@ -177,7 +178,6 @@ class SichuanClient extends React.Component {
                 ponThis[i] = null;
             }
         }
-        console.log(ponThis);
         this.setState({ ponThis: ponThis }, this.sendPons);
     }
 
@@ -322,7 +322,6 @@ class SichuanClient extends React.Component {
                     </Row>
                     : ""
                 }
-                <Container>{this.state.log}</Container>
             </Container>
         );
     }
