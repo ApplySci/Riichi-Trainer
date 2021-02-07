@@ -239,7 +239,7 @@ class SichuanClient extends React.Component {
         let voidSuits = this.state.voidedSuits.slice();
         voidSuits[0] = chosenTile;
         this.setState({ handStage: HANDSTAGE.firstDiscard, voidedSuits:voidSuits, myTurn: true }); // TODO remove myTurn here
-        this.socket.emit('void', chosenTile);
+        this.socket.emit('voidsuit', chosenTile);
     }
 
 
@@ -250,7 +250,6 @@ class SichuanClient extends React.Component {
         let ponPos = this.state.hand.indexOf(tileIndex);
         ponThis[ponPos] = !ponThis[ponPos];
         this.setState({ ponThis: ponThis }, this.sendPons);
-        this.socket.emit('pon', {tile: tileIndex, pon: ponThis[ponPos]});
     }
 
 
