@@ -1,14 +1,18 @@
-import BaseGame from '../src/states/BaseGame';
-import Player from '../src/states/Player';
-import { calculateStandardShanten } from "../../src/scripts/ShantenCalculator";
-import { removeRandomItem, getRandomItem } from '../../src/scripts/Utils';
-import { convertHandToTileIndexArray } from "../../src/scripts/HandConversions";
+import Player from './Player';
+import { calculateStandardShanten, removeRandomItem, convertHandToTileIndexArray } from './ServerUtils';
 
-export default class GameServer extends BaseGame {
+export default class GameServer {
 
     constructor(props) {
-        super(props);
 
+        this.deltas = [];
+        this.players = [];
+        this.remainingTiles = [];
+        this.seatWinds = [32, 33, 34, 31], // like this because we rotate the winds before turn 1
+        this.tilePool = [];
+        this.turn = 0; // index of player whose turn it is, 0-3
+
+        this.addPlayer = this.addPlayer.bind(this);
         this.checkWin = this.checkWin.bind(this);
         this.getStartingTiles = this.getStartingTiles.bind(this);
         this.newHand = this.newHand.bind(this);
@@ -17,6 +21,21 @@ export default class GameServer extends BaseGame {
         this.setWaits = this.setWaits.bind(this);
     }
 
+
+    addPlayer(name) {
+        let playerCount = this.players.length;
+        if (playerCount > 3) {
+            return -1;
+        }
+        let player = new Player();
+        playerCount++;
+        player.name = name;
+        this.players.push(player);
+        if (playerCount == 4) {
+            // TODO START GAME
+        }
+        return playerCount - 1;
+    }
 
     checkWin(player, tile) {
 
@@ -109,6 +128,8 @@ export default class GameServer extends BaseGame {
                 isComplete = true;
             }
         }
+
+
 
     }
 

@@ -5,6 +5,7 @@ export default class Player {
         this.melds = [[1,1,1]];
         this.name = '';
         this.gameScore = 0;
+        this.willPon = [];
         this.socket = null;
         this.totalScore = 0;
         this.voidedSuit = null;

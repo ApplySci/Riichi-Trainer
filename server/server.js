@@ -1,3 +1,16 @@
+/*
+
+This file does the communications with the clients. It delegates all game tasks down to the GameServer object
+
+*/
+import './GameServer';
+
+import Fraud from 'fraud';  // for saving stuff to disk https://www.npmjs.com/package/fraud
+const database = new Fraud({
+    directory: "./database"
+});
+const admin = database.read('admin');
+
 const httpServer = require('http').Server(); // (app)
 const io = require('socket.io')(httpServer, {
     cors: {
@@ -17,7 +30,6 @@ let seat = 3;
 let table = -1;
 
 io.on('connection', function (socket) {
-    console.log(socket);
 
     let pSeat;
     let pTable;
@@ -37,6 +49,7 @@ io.on('connection', function (socket) {
 
     socket.on('disconnect', function () {
         console.log('disconnect');
+        // TODO socketsToSeats.delete(socket);
     });
 
     socket.on('winningtiles', function(tiles) {
@@ -61,6 +74,21 @@ io.on('connection', function (socket) {
         console.log('discard:');
         console.log(discard);
         io.to('T' + pTable).emit('discard', { table: pTable, seat: pSeat, discard: discard });
+
+
+        // is the game live
+
+        // is it this player's turn?
+
+        // update table
+
+        // send discard to all players at this table
+        socket.to('T' + pTable).emit('discard', { table: pTable, seat: pSeat, discard: discard });
+
+        // check victory - are any of the players at this table waiting on this discard?
+
+        // rotate to next player
+        socket.to('T' + pTable).emit('turn', { table: table, turn: pSeat });
     });
 });
 
