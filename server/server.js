@@ -14,7 +14,7 @@ const admin = database.read('admin');
 const httpServer = require('http').Server(); // (app)
 const io = require('socket.io')(httpServer, {
     cors: {
-      origin: [/azps\.info$/, /localhost/],
+      origin: [/learn.mahjong.ie$/, /localhost/, /azps.info/],
       methods: ["GET", "POST"]
     }
   });

@@ -33,8 +33,6 @@ class TibetMenu extends React.Component {
                         <li><NavLink to='/tibet/14/1/1/1/0'>14 tiles, 3 suits</NavLink></li>
                         <li><NavLink to='/tibet/14/1/1/1/1'>14 tiles, 3 suits &amp; Honours</NavLink></li>
                         <li>---------------------</li>
-                        <li><NavLink to='/sbr'>Sichuan Bloody Rules</NavLink></li>
-                        <li>---------------------</li>
                         <li>For advanced players only:</li>
                         <li><NavLink to='/tibet/11/1/0/0/0'>11 tiles, 1 suit</NavLink></li>
                         <li><NavLink to='/tibet/14/1/0/0/0'>14 tiles, 1 suit</NavLink></li>

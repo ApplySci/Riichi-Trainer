@@ -32,7 +32,7 @@ class SichuanClient extends React.Component {
     constructor(props) {
         super(props);
         this.inEvent = false;
-        this.socket = openSocket('wss://ws.azps.info/');
+        this.socket = openSocket('wss://ws.mahjong.ie/');
         this.tilesGone = Array(38).fill(0);
         this.timerUpdate = null;
         this.timer = null;
