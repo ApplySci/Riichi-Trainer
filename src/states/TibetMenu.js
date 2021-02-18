@@ -9,7 +9,7 @@ import SichuanClient from "./SichuanClient";
 
 class TibetMenu extends React.Component {
     state = {
-        showPopup: true
+        showPopup: false
         };
 
     togglePop = () => {

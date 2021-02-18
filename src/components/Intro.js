@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Container } from 'reactstrap';
 import Hand from '../components/Hand';
 
@@ -27,6 +28,7 @@ export default function Intro() {
                 <li>Or a triplet of identical tiles (e.g. 777)</li>
                 <li>We will introduce these suits into the hand one at a time.</li>
             </ul>
+            <h3>And after this, you're ready to start <Link to='/tibet/5/1/0/0/0'>building a hand</Link></h3>
             <h2>The dots (aka circles, pin)</h2>
             <Hand tiles={pin} lastDraw={-1} onTileClick={null} showIndexes={true} blind={false} />
             <Hand tiles={pin} lastDraw={-1} onTileClick={null} showIndexes={true} blind={false} />
@@ -48,6 +50,7 @@ export default function Intro() {
             <Hand tiles={hon} lastDraw={-1} onTileClick={null} showIndexes={true} blind={false} />
             <Hand tiles={hon} lastDraw={-1} onTileClick={null} showIndexes={true} blind={false} />
             <Hand tiles={hon} lastDraw={-1} onTileClick={null} showIndexes={true} blind={false} />
+            <p>And now you're ready to start <Link to='/tibet/5/1/0/0/0'>building a hand</Link></p>
         </Container>
     );
 }
