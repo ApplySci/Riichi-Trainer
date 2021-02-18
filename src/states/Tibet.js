@@ -417,7 +417,9 @@ class Tibet extends React.Component {
         return (
             <Container>
                 <Row>A winning hand has {nGroups} group{nGroups > 1 ? "s" : ""} of three tiles, and an identical pair.
-                Within any one group, all the tiles must come from the same suit. Different groups can come from different suits.</Row>
+                Within any one group, all the tiles must come from the same suit. Different groups can come from different suits.
+                Each group can consist either of a sequence of three consecutive tiles (e.g. 123 or 567; but not 135 or 468 or 891).
+                Or a triplet of identical tiles (e.g. 777). A hand can have just sequences, just triplets, or some of each.</Row>
                 <Hand tiles={this.state.hand}
                     lastDraw={this.state.lastDraw}
                     onTileClick={this.onTileClicked}
