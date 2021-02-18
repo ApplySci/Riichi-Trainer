@@ -50,7 +50,7 @@ export default function Intro() {
             <Hand tiles={hon} lastDraw={-1} onTileClick={null} showIndexes={true} blind={false} />
             <Hand tiles={hon} lastDraw={-1} onTileClick={null} showIndexes={true} blind={false} />
             <Hand tiles={hon} lastDraw={-1} onTileClick={null} showIndexes={true} blind={false} />
-            <p>And now you're ready to start <Link to='/tibet/5/1/0/0/0'>building a hand</Link></p>
+            <h3>And now you're ready to start <Link to='/tibet/5/1/0/0/0'>building a hand</Link></h3>
         </Container>
     );
 }
