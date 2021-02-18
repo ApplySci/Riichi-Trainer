@@ -1,6 +1,10 @@
 /* AZPS content ============================================
 */
 
+h3 a {
+  color: #008;
+}
+
 .handTile {
     width: 6%;
     height: 6%;
